@@ -225,4 +225,77 @@ To avoid sending multiple duplicate requests (a user clicks a button multiple ti
 - Add a unique message ID to the request message. This helps the receiver recognize duplicate requests.
 - Check for duplicate records before inserting data into the external system.
 
-[Integration Patterns Overview](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_intro_overview.htm)
+[Integration Patterns Overview](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_intro_overview.htm)  
+  
+**Connectors for Data Integration**  
+  
+***Mulesoft Salesforce Connector***  
+Salesforce Connector can be used by a Mule App to connect to and from Salesforce or other data sources. The processing logic happens within the Mule Integration App. he Mule App works as the go-between, avoiding point-to-point integrations, and *decoupling* the two systems.  
+  
+***MuleSoft Database Connector***
+Works alongside any Java Database Connectivity (JDBC) accessible database, including Postgres.  
+
+***MuleSoft HTTP Connector***
+Supports listening for and sending HTTP requests.  
+  
+***Heroku Connect***
+Heroku Connect connects one or more Salesforce instances to a Heroku Postgres database using SOAP, Bulk, and Streaming APIs.  
+  
+***Salesforce Connect***  
+Provides a method that creates external (temporary) objects that access real-time data coming from external platforms to Salesforce without having to store the data.
+
+**API-led connectivity** spans across three layers—System APIs, Process APIs, and Experience APIs. Each of the layers are decoupled from one another.  
+- **the system layer** is directly connected with external systems, for instance the database, legacy systems, or SaaS applications. Connecting to external systems is the only job of this layer.
+- **the process layer** reads the data from the system layer. This is where the business logic and orchestrations are contained. 
+- **the experience layer** is where the end user interacts with the data and processes. At this point, the user can modify the data and tailor it for their intended audience.  
+
+From MuleSoft connectors to using Heroku Connect, integration connectors use Salesforce APIs via SOAP, Bulk, and Streaming. There are differences between each option when it comes to three key areas:
+- DevOps and/or Administrative and Ongoing Integration Maintenance
+- Functionality
+- Licensing
+
+**Factors Affecting Scale**
+- Lack of Proper Bulkification - to improve
+    - optimize trigger code
+    - follow Apex best practices
+    - ensure to use optimum batch sizes to improve bulkification, if using Bulk V1 (Salesforce times out batches that run more than 10 minutes)
+    - consolidate multiple API calls into a single call using Composite APIs
+- Lack of Governance
+    - running multiple conflicting integrations
+    - a poor data/sharing model
+- Locking
+    - avoid running conflicting updates to the same records in different threads
+- Heavy Apex Post-Processing
+    - verify that the Apex post-processing is minimized.
+
+**Assessing the Integration You Need**  
+- Source and Target - which system is initiating the integration and which system(s) is (are) integrated with the source
+- Type - Is the integration at the presentation, business process, or data layer?
+- Data Volume - number of rows of data, the size of the data
+- Timing - sync or async
+- Is it necessary to move the data?
+- Is it a view-only requirement?
+- How often does the data need to be moved?
+- Which object will be used?
+- What is the volume of data per hour and at its peak?
+- What is the total anticipated volume?
+
+**Mitigate Failing Data Loads**
+
+***Anti-Patterns*** are those common solutions that are ineffective. Initially these solutions look appropriate, but in actuality the consequences outweigh the benefits. 
+- No pre-assessment done to determine batch load times in sandbox
+- Using SOAP API for nightly loads greater than 500,000
+    - If you have 500,000 or more records to load, use Bulk API.
+- Running batch Apex in parallel along with data loads
+- Expecting a strict SLA for an asynchronous operation
+- No performance assessment done for custom Lightning components before deployment
+- Mimic org hierarchy for role hierarchy while creating temporary placeholder roles for the future
+- Determine the max levels needed in Salesforce based on reporting needs.
+- Use SOSL to implement custom search solutions by using global search with wildcards for large orgs
+- Use reports without any proper filters in place
+- Scope reports with date filters and indexed fields if possible
+    - Prevent using not contains and not equal to with indexed fields
+    - use relative date values in reports, for example this week, next week or next month
+    - Avoid using formula fields in report filters
+    - Equals is better than contains
+- Use canned reports for common operations
