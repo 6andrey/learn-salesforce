@@ -299,3 +299,31 @@ From MuleSoft connectors to using Heroku Connect, integration connectors use Sal
     - Avoid using formula fields in report filters
     - Equals is better than contains
 - Use canned reports for common operations
+
+### [Integration Architecture for the Salesforce Platform](https://developer.salesforce.com/blogs/developer-relations/2014/11/salesforce-integration-architecture)
+
+The Integration Architecture Aligns the Business Strategy with Technical Capabilities.  
+The Integration Architecture supports a Mix of Batch Processing and Real-time Services Middleware
+- This means having multiple types of middleware at work.  
+The Integration Architecture is Based Upon Business Service Level Agreements (SLAs)
+- understand if and when to use asynchronous processing.
+The Integration Architecture Has a Clearly Defined Standard for Applying Different Integration Use Cases
+
+## Evaluate business needs
+Exam Weight: 11%
+
+### [Governance Basics](https://trailhead.salesforce.com/content/learn/modules/governance-basics?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+
+### [Key Principles for a Successful Salesforce Implementation Part III: Governance](https://medium.com/salesforce-architects/key-principles-for-a-successful-salesforce-implementation-part-iii-governance-b2a165f431c3)
+
+**Explain The Value**  
+When changing any process, explain the value of making the change in a way that means something to those affected. Also important to expalin senior leadership how change of an approach will affect business processes.  
+**When and How to Govern**  
+Transition from unprincipled to principled governance. Adding a 'principle checkpoint' into existing governance processes:
+- Solution design - after requirement have been aligned to features and solutions
+- Solution approval - before a solution design or statement of work
+- Architectural reviews - during regular architecture group meetings
+- Change management - before a release or change is approved for deployment
+
+**Managing the Principle Lifecycle**  
+Principles should not chnage often, however, adapting of business reuirements will to adapting of principles
