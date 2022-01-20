@@ -327,3 +327,27 @@ Transition from unprincipled to principled governance. Adding a 'principle check
 
 **Managing the Principle Lifecycle**  
 Principles should not chnage often, however, adapting of business reuirements will to adapting of principles
+
+## Translate needs to Integration Requirements
+Exam Weight: 22%
+
+### [Certificates and Keys](https://help.salesforce.com/s/articleView?id=sf.security_keys_about.htm&type=5)
+
+Salesforce certificates and key pairs are used for signatures that verify a request is coming from your organization. They can be exported into a keystore for storage or import certificates and keys from a keystore. This allows you to move keys from one organization to another. The exported file is in Java Keystore format.  
+
+**API Client Certificate** is used by workflow outbound messages, the AJAX proxy, and delegated authentication HTTPS callouts. For security reasons, the API client certificate should be known only to your org.
+Choose an API client certificate based on the remote endpoint you connect to. Some endpoint servers require a certificate chain that is trusted by a certificate authority; others are fine with directly trusting a self-signed certificate.
+- **Generate a Self-Signed Certificate** signed by Salesforce to show that communications purporting to come from your organization are really coming from there.  
+`Setup -> Certificate and Key Management -> Create Self-Signed Certificate`  
+- **Generate a Certificate Signed by a Certificate Authority** 
+`Setup -> Certificate and Key Management -> Create CA-Signed Certificate`  
+Send the certificate request to certificate authority. After it's signed, upload the certificate...  
+- **Set Up a Mutual Authentication Certificate** - to prevent security from being compromised by simple impersonation, you can require clients and servers to prove their identity to each other with a mutual authentication certificate.  
+`Certificate and Key Management -> Upload Mutual Authentication Certificate`  
+- **Manage Master Encryption Keys** - Encrypted custom fields, such as Social Security Number or Credit Card Number, are encrypted with a master encryption key. This key is automatically assigned when you select fields to encrypt. You manage your own master key according to your organization’s security and regulatory needs.  
+
+### [Configure Remote Site Settings](https://help.salesforce.com/s/articleView?id=sf.configuring_remoteproxy.htm&type=5)
+
+Before any Visualforce page, Apex callout, or JavaScript code using XmlHttpRequest in an s-control or custom button can call an external site, that site must be registered in the Remote Site Settings page, or the call fails.  
+`Setup -> Remote Site Settings -> New Remote Site`  
+
