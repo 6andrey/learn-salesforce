@@ -339,7 +339,7 @@ Salesforce certificates and key pairs are used for signatures that verify a requ
 Choose an API client certificate based on the remote endpoint you connect to. Some endpoint servers require a certificate chain that is trusted by a certificate authority; others are fine with directly trusting a self-signed certificate.
 - **Generate a Self-Signed Certificate** signed by Salesforce to show that communications purporting to come from your organization are really coming from there.  
 `Setup -> Certificate and Key Management -> Create Self-Signed Certificate`  
-- **Generate a Certificate Signed by a Certificate Authority** 
+- **Generate a Certificate Signed by a Certificate Authority**  
 `Setup -> Certificate and Key Management -> Create CA-Signed Certificate`  
 Send the certificate request to certificate authority. After it's signed, upload the certificate...  
 - **Set Up a Mutual Authentication Certificate** - to prevent security from being compromised by simple impersonation, you can require clients and servers to prove their identity to each other with a mutual authentication certificate.  
@@ -351,3 +351,88 @@ Send the certificate request to certificate authority. After it's signed, upload
 Before any Visualforce page, Apex callout, or JavaScript code using XmlHttpRequest in an s-control or custom button can call an external site, that site must be registered in the Remote Site Settings page, or the call fails.  
 `Setup -> Remote Site Settings -> New Remote Site`  
 
+### [Build Integrations Using Connected Apps](https://trailhead.salesforce.com/en/content/learn/trails/build-integrations-using-connected-apps?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+  
+A **connected app** is a framework that enables an external application to integrate with Salesforce using APIs and standard protocols used to authorize, authenticate, and provide single sign-on (SSO) for external apps.  
+  
+**Benefits of using conected apps**:
+- Access data with API integration - to pull data from your SF org.
+- Integrate service providers with your SF. E.g. when SF acts as identity provider.
+- Provide authorization to external API gateways - SF acts as independent OAuth authorization server.
+- Manage access to third-party apps - e.g. to control what data 3rd-party has access to in SF.
+  
+**Who does what**:
+- Connected developer - builds API integrations or external apps that can access SF data as a connected app.
+- Connected app admin - installs, uninstalls, blocks connected apps from SF org, configures permissions and policies.
+
+**Access Data with API Integration**  
+  
+***Connected App and OAuth Terminology***
+- Access Token - can be used instead of user's SF credentials
+- Authorization Code - token that represents access granted to the end user, used in OAuth 2.0
+- Authorization Server - authorizes a resource owner and issues tokens
+- Callback URL - invoked after OAuth authorization for the consumer (connected app)
+- Consumer - website or app that uses OAuth to authorize SF user and itself
+- Consumer Key - used by consumer to identify itself to Salesforce
+- Consumer Secret - used by consumer to establish ownership of consumer key
+- OAuth Endpoint - URL used to make authorization request to SF
+- Nonce - number, often random, used during authorization
+- Token Secret - secret used by a consumer to establish ownership of a given token
+
+**Authorization for connected apps**  
+
+A **connected app** to establich access to SF data using API has to use **OAuth 2.0 protocol**, that enabled authorization and data sharing between apps using tokens.  
+  
+1st authorization flow on mobile app:
+1. Enter username and password
+2. App send credentials to SF and initiates OAuth authorization flow
+3. SF sends to the app access and refresh tokens
+4. User approves request to grant access to the app
+5. App starts
+
+Ongoing authorization flow:
+1. If the session is active, app starts immediately. If the sessio is stale, app uses refresh token to get updated session.
+2. App starts.
+  
+**Web API integration (OAuth 2.0 Web Server Flow)**  
+1. Connected app directs user to SF to authenticate and authorize the app to access SF data
+2. The user approves the app access to data
+3. SF sends a callback to the app with authorization code
+4. The app passes the code to the SF token endpoint, requesting access token
+5. SF validates the code, and sends back the access token
+6. The app sends a request (with access token) back to SF to access the data
+7. SF validates the access token and associates the scope
+8. The app gets access to protected data
+  
+**Mobile app integration (OAuth 2.0 User-Agent Flow)** (using SF mobile SDK)
+1. Conencted app directs the user to SF to authenticate and authorize the mobile app
+2. The user approves access for the authorization flow
+3. The app receives callback from SF to redirect URL, which extracts access and refresh tokens
+4. The connected app uses access token to access data on user's behalf
+
+**Server to server integration (OAuth 2.0 JWT Bearer Flow)**  
+*JWT - Jason Web Token*  
+1. The connected app sends the JWT to SF token endpoint
+2. SF validates JWT based on signature using a previously configured certificate and additional parameters
+3. SF issues an access token
+4. The connected app uses the access token to access the protected data in SF
+  
+**Integrate Service Providers with Salesforce**  
+  
+Identity provider vs. service provider:
+- Identity provider - A trusted service that enables users to access other external applications without logging in again.
+- Servicde provider - A service that accepts identity on behalf of the external application from an identity provider.
+  
+**Integrate a Service Provider with SAML**  
+A connected app, that implements SAML 2.0, can be used to intergrate a service provider with SF org for user authentication. Use it if your org already uses SAML.  
+  
+**Integrate a Service Provider with OpenID Connect**  
+A connected app, that implements OpenID Connect, can be used to intergrate a service provider with SF org for user authentication. The service provider must accept OpenID Connect tokens.  
+  
+**Provide Authorization for External API Gateways**  
+  
+**OpenID Connect Dynamic Client Registration and Token Introspection**  
+Dynamic client registration enables resource servers to dynamically create client apps as connected apps.  
+Token introspection allows all OAuth connected apps to check the current state of an OAuth 2.0 access or refresh token.  
+  
+  
