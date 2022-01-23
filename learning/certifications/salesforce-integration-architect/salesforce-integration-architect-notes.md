@@ -435,4 +435,34 @@ A connected app, that implements OpenID Connect, can be used to intergrate a ser
 Dynamic client registration enables resource servers to dynamically create client apps as connected apps.  
 Token introspection allows all OAuth connected apps to check the current state of an OAuth 2.0 access or refresh token.  
   
+**Secure Secrets Storage**  
   
+**Secrets** are data that can be used to verify what privileges a user has in a given situation. E.g. Passwords and passphrases, Encryption keys, OAuth tokens, Payment information, such as credit card numbers and PINs used to authenticate a payment transaction, Social Security numbers, which can be used to verify individual identity.  
+  
+Protect secrets from:
+- Standard Users
+- External Users
+- Admins (e.g. with Modify All Data permission)  
+  
+Store app secrets in Salesforce:
+- Named Credential - URL of a callout endpoint and its required authentication parameters in one definition. 
+    - Once created, you can replace URL references in your code with references to the named credentials, which results in cleaner, simpler, and more secure code.
+    - Admins, users with View All data, Modify All Data, Author Apex permissions have access named credentials
+- Distributed Secrets - admin access can be prevented with creating managed packages
+- Protected Custom Settings and Protected Custom Metadata Types
+    - custom settings can be used to store sensitive information or secrets. Protected custom setting in managed package aren't visible for subscribing orgs through Apex or API
+    - Custom metadata fields can be utilized for secret storage in a similar way to custom settings. For proper secrecy, set their visibility to ”Protected” and contain them within a managed package. Visibility can be: Public (local), Protected (local), Public (managed), Protected (managed). **Use Protected (managed) to store app secrets.**  
+      
+**Use protected custom settings when:**
+- The secret needs to be updated frequently and must be available immediately. Since metadata types need to be enqueued and deployed, updated secrets in metadata types aren’t available right away. This makes a custom setting the better option here.
+- You want to specify which profiles and users can access which secrets. Metadata types don’t offer the granularity of the custom settings hierarchy types, which allow you to specify to which profiles or users the secrets should be available. That’s why it is better to use a custom setting here.
+  
+**Use custom metadata types when:**
+- You want to deploy a common secret without extra configuration steps.
+- Custom metadata secrets can be easily migrated, for example, from a sandbox or dev environment to a production environment. Whereas in custom settings, admins need to either write postinstall scripts or create pages and manually enter and store secrets in the new environment.
+  
+**Apex Crypto Class** provides sets of functions that are particularly valuable for safeguarding your communications.  
+- Encryption and Decryption to Protect Confidentiality (Crypto.Encrypt(); Crypto.Decrypt(); Crypto.generateAESKey(Integer keylength))
+-  Hash Digests to Protect Integrity (Crypto.generateDigest())
+- Hash-Based Message Authentication Codes (MACs) to Prove Authenticity and Integrity (Crypto.generateMac())
+- Creating a Digital Signature - ensure both the integrity and authenticity (Crypto.sign())
