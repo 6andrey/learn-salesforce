@@ -435,7 +435,7 @@ A connected app, that implements OpenID Connect, can be used to intergrate a ser
 Dynamic client registration enables resource servers to dynamically create client apps as connected apps.  
 Token introspection allows all OAuth connected apps to check the current state of an OAuth 2.0 access or refresh token.  
   
-**Secure Secrets Storage**  
+### [**Secure Secrets Storage**](https://trailhead.salesforce.com/content/learn/modules/secure-secrets-storage?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
   
 **Secrets** are data that can be used to verify what privileges a user has in a given situation. E.g. Passwords and passphrases, Encryption keys, OAuth tokens, Payment information, such as credit card numbers and PINs used to authenticate a payment transaction, Social Security numbers, which can be used to verify individual identity.  
   
@@ -466,3 +466,56 @@ Store app secrets in Salesforce:
 -  Hash Digests to Protect Integrity (Crypto.generateDigest())
 - Hash-Based Message Authentication Codes (MACs) to Prove Authenticity and Integrity (Crypto.generateMac())
 - Creating a Digital Signature - ensure both the integrity and authenticity (Crypto.sign())
+  
+### [Change Data Capture Basics](https://trailhead.salesforce.com/content/learn/modules/change-data-capture?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+  
+**Change Data Capture** is a streaming product on the Lightning Platform that enables you to efficiently integrate your Salesforce data with external systems in real time, publishes events for changes in Salesforce records corresponding to create, update, delete, and undelete operations. **Streaming events** are instant notification messages that one system (the publisher) sends to another (the subscriber).  
+  
+Change Data Capture **supports** change events for custom objects and the most popular standard objects including Account, Contact, Lead, User, Order, OrderItem, Product2, and others.  
+  
+Fields Included in the Body of a JSON Event Message:
+- Create - the event message body includes all non-empty fields along with system fields such as the CreatedDate and OwnerId fields.
+- Update - the body includes only the changed fields. It also includes the LastModifiedDate system field.
+- Delete - the body doesn’t include any fields or system fields.
+- Undelete - the body includes all non-empty fields from the original record, in addition to system fields.
+  
+**The order of the fields** in the JSON event message is not guaranteed. 
+  
+Change events can be enriched with selected fields, which will be send always (e.g. External Id).  
+  
+For apps external to Salesforce, you can use **Streaming API**, or tools and libraries based on **CometD**, an open-source library that simulates push technology. Streaming API provides a subscription mechanism based on CometD.  
+  
+Subscription Channels:
+- Standard Channels
+    - Standard Channel for Selected Entities - all selected objects - `/data/ChangeEvents`
+    - Single-Entity Channels - `/data/<Standard_Object_Name>ChangeEvent` or `/data/<Custom_Object_Name>__ChangeEvent`
+- Custom Channels - multiple subscribers and each subscriber receives change events from a different set of entities - `/data/YourChannelName__chn`
+  
+**Subscribe to Change Events Using an Apex Trigger**  
+Like an Apex trigger for Salesforce objects, you define a change event trigger on the change event corresponding to the Salesforce object. Only after insert triggers are supported.  
+`trigger TriggerName on ChangeEventName (after insert) {}`  
+  
+Change event triggers run **asynchronously** after the database transaction is completed.
+- They run under the Automated Process entity.
+- They are subject to Apex synchronous governor limits.
+- They have a maximum batch size of 2,000 event messages.
+  
+**Testing Change Event Trigger**  
+
+```
+@isTest static void testChangeEventTrigger() {
+    // Enable all Change Data Capture entities for notifications.
+    Test.enableChangeDataCapture();
+    // Insert one or more test records
+    // ...
+    // Deliver test change events
+    Test.getEventBus().deliver();
+    // Verify the change event trigger’s execution
+    // ...
+}
+```
+  
+## Design Integration Solutions
+Exam Weight 28%  
+  
+  
