@@ -518,4 +518,71 @@ Change event triggers run **asynchronously** after the database transaction is c
 ## Design Integration Solutions
 Exam Weight 28%  
   
+### [Integration Patterns and best practices](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_intro_overview.htm)  
+  
+**Integration Patterns**  
+Strategies' description (in the form of patterns) for common integration scenarios.  
+  
+**Pattern Template**:
+- Name
+- Context
+- Problem
+- Forces - The constraints and circumstances that make the stated scenario difficult to solve.
+- Solution
+- Sketch - A UML sequence diagram that shows you how the solution addresses the scenario.
+- Results
+- Sideboards - Additional sections related to the pattern that contain key technical issues, variations of the pattern, pattern-specific concerns, and so on.
+- Example
+  
+**List of Patterns**  
+  
+| Pattern | Context | Problem | Forces | Solution (best) | Sketch / Results / Sideboards / Example |
+|---|---|---|---|---|---|
+| Remote Process Invocation—Request and Reply | Orders created in SF, then created in remote system for managing  | How to initiate process in the remote, pass infor to it, receive response data | * Sync or async? * Sf to process response from remote? * Message size? * Event - UI or DML? Latency? | * Enhanced External Services invokes a REST API call * SF Lightning—Lightning comp or page initiates a sync Apex SOAP or REST callout * VF or button initiates a sync Apex HTTP callout | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_remote_process_invocation_state.htm) |
+| Remote Process Invocation—Fire and Forget | Orders created in SF, then created in remote system, but SF doesn't wait for response | How to initiate process in the remote, pass infor to it, without waiting for response? | * Sync or async? * Sf to process response from remote? * Message size? * Event - UI or DML? Is guaranteed msg delivery a requirement? | * Process-driven platform events | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_remote_process_invocation_fire_forget.htm) |
+| Batch Data Synchronization | Movin CRM into SF with initial and ingoing import and ongoing export | How to import/export large amount of data?.. | Should data stored in SF?  * Shoukd datas be refreshed in response event from remote? On schedule? A=Reporting requirements? | * Salesforce Change Data Capture * Replication via third-party ETL tool | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_batch_data_sync.htm) |
+| Remote Call-In | Capture orders in SF but process in remote | How remote connects and auth w. SF? | Remote call to notify SF or perform CRUD ops? * Single or multiple objects? * Msg format? * Transaction processing? | SOAP or REST API | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_remote_call_in.htm) |
+| UI Update Based on Data Changes | Real time data update from remote in SF | How user notified on event in SF w/o refresheing screen? | * Data persistence in SF? * User access to invoke custom UI? | Streaming AP | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_ui_updates_from_data_changes.htm) |
+| Data Virtualization | Orders are managed by remote but users want to view and update real-time info in SF | How to view, serach and update data not stored in SF w/o moving data into SF? | * Declarative outbounf integration or UI mashup? * Amount of data? Real-time access? Remote is clousd or back-office? | Salesforce Connect | [Link](https://developer.salesforce.com/docs/atlas.en-us.integration_patterns_and_practices.meta/integration_patterns_and_practices/integ_pat_data_virtualization.htm) |
+  
+Integration Pattern Categories:
+- Data Integration - to sync data that resides in 2+ systems
+- Process Integration - business process to leverage 2+ apps to complete tasks
+- Virtual Integration - user to view, search, and modify data stored in external system
+  
+**Pattern Selection Guide**  
+Pattern Category (above) + timing (sync / async)  
+  
+Integrating SF with external system
+- Process Integration + Sync = Remote Process Invocation - request and Reply
+- Process Integration + Async = Remote Process Invocation - Fire and Forget
+- Data Integration + Sync = Remote Process Invocation - request and Reply
+- Data Integration + Async = UI Update Based on Data Changes
+- Virtual Integration + Sync = Data Virtualization
+  
+Integrating external system with SF
+- Process Integration + Sync / Async = Remote Call-In
+- Data Integration + Sync = Remote Call-In
+- Data Integration + Async = Batch Data Syncronization
+  
+**Middleware Terms and Definitions**  
+- Event Handling - the receipt of an identifiable occurrence at a designated receiver (“handler”).
+- Protocol Conversion - typically a software application that converts the standard or proprietary protocol of one device to the protocol suitable for another device to achieve interoperability.
+- Translation and transformation - the ability to map one data format to another to ensure interoperability between the various systems being integrated.
+- Queuing and buffering - generally rely on asynchronous message passing, as opposed to a request-response architecture.
+- Synchronous transport protocols - refer to protocols that support activities wherein a “single thread in the caller sends the request message, blocks to wait for the reply message, and then processes the reply.
+- Asynchronous transport protocols - refer to protocols supporting activities wherein “one thread in the caller sends the request message and sets up a callback for the reply.
+- Mediation routing - the specification of a complex “flow” of messages from component to component
+- Process choreography and service orchestration - forms of  “service composition” where any number of endpoints and capabilities are being coordinated.
+- Transactionality - the ability to support global transactions that encompass all necessary operations against each required resource. Transactionality implies the support of all four ACID (atomicity, consistency, isolation, durability) properties.
+- ETL - Extract, transform, and load.
+- Long polling - Comet programming, emulates an information push from a server to a client.
+  
+### [Outbound Messaging](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_om_outboundmessaging.htm)  
+Outbound messaging is part of the workflow rule functionality in Salesforce.  
+  
+Outbound messaging uses the `notifications()` call to send SOAP messages over HTTP(S) to a designated endpoint when triggered by a workflow rule. A single SOAP message can include up to 100 *notifications*. Each notification contains the object ID and a reference to the associated *sObject* data. Calls cna be batched into 1+ SOAP messages. Messages can be queued until sent successfully or 24 hours old. If a messages can't be delivered, the interval increases exponentially up to 2 hours. Messages may be delivered out of order.
+    
+Instead of polling, the outbound messaging can be used to trigger execution logic when SF raises an event.  
+  
   
