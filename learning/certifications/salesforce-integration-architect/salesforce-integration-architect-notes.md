@@ -585,4 +585,143 @@ Outbound messaging uses the `notifications()` call to send SOAP messages over HT
     
 Instead of polling, the outbound messaging can be used to trigger execution logic when SF raises an event.  
   
+### [Canvas Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.platform_connect.meta/platform_connect/canvas_framework_intro.htm#!)  
+**Canvas** is a set of tools and JavaScript APIs that you can use to expose an application as a canvas app. The third-party app that you want to expose as a canvas app can be written in any language. The only requirement is that the app has a secure URL (HTTPS).  
   
+**Canvas Scenarios**  
+- Application integration — to integrate cloud applications with Salesforce.
+- Application rationalization/enterprise desktop — to integrate existing apps into Salesforce so that users can accomplish all of their tasks in one place.
+  
+## Build Solution
+Exam Weight 23%  
+  
+### [API-Led Integration for Business Reinvention](https://trailhead.salesforce.com/content/learn/modules/api-led-integration-for-business-reinvention?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+  
+(some inspiring text not worth taking notes)  
+
+### [Access External Data With Salesforce Connect](https://help.salesforce.com/s/articleView?id=sf.salesforce_connect.htm&type=5)
+View, search, and modify data that’s stored outside your Salesforce org.  
+  
+Salesforce Connect maps Salesforce external objects to data tables in external systems. Use Salesforce Connect when:
+- You have a large amount of data that you'don't want to copy into SF org.
+- You need a small amount of data at any one time.
+- You want real-timne access to the latest data.
+  
+External Objects are available to:
+- Global search
+- Lookup relationships
+- Record feeds
+- SF mobile app
+- Apex, SOSL, SOQL, SF APIs
+- Deployment through Metadata API, change sets, and packages
+  
+SF Connect Adapters:
+- Cross-org - uses Lightning Platform REST API to connect between SF orgs
+- OData 2.0, OData 4.0 - uses Open Data Protocol
+- Custom adapter created via Apex - uses the Apex Connector Framework
+  
+SF Connect requires add-on license(s). Each License includes 5 cross-org and 1 Odata or custom adapter connector.  
+  
+| General Limits for Sf Connect||
+|---|---|
+| Max external objects per org (regardles of how many licenses purchased) | 200 |
+| Max joins per query across external objects and other types of objects| 4 |
+| Ma length of the OAuth token issued by external system| 4,000 chars |
+| Max new rows retrieved by SOSL and SF searches per hour | 100,000 |
+| Max new rows retrieve or crated per hour (doesn't apply to high-data volume external data sources, search result that aren't opened or edited, other roes that have been already retrieved) | 100,000 |
+| Max page sixe for server-driven paging | 2,000 rows |
+  
+| Callout Limits ||
+|---|---|
+| Cross-org adapter| No call-out limits, but each call-out counts toward API limits |
+| OData | 20,000 call-outs per hr for Enterprise, Performance and Unlimited. 1,000 for Developer |
+
+On the external data source configured for Salesforce Connect, the **Identity Type** field specifies whether your organization uses one set or multiple sets of credentials to access the external system. Each set of credentials corresponds to a login account on the external system.  
+| To access the external system's | The system uses the credentials that are difined in... | The system uses the credentials that are difined in... |
+|---|---|---|
+| Data | External dasta source definition | User's personal auth settings for the external system|
+| Metadata | External dasta source definition | External data source definition |
+  
+When you validate and sync an external data source, it creates or overwrites Salesforce external objects that map to the external system’s schema. Syncing doesn’t copy any data into your Salesforce org or write data from your org to the external system.  
+  
+External objects behave similar to custom objects except that they map to data stored outside Salesforce in an external data source. Each external object maps to a data table, and the object fields map to accessible table columns.  
+
+Features not supported with External Objects:
+- Set up Data with External Objects
+    - Merge Fields
+    - Schema Builder
+    - Validation Rules
+    - Custom fields - Field types not supported: Auto-Number (available only with the cross-org adapter for SF Connect), Currency (available only with the cross-org adapter for SF Connect), Formula, Geolocation, Master-Detail Relationship, Picklist and Picklist (Multi-select) (available only with the cross-org adapter for SF Connect), Roll-up Summary, Text (Encrypted), Text Area (Rich)
+    - Lookup filter on relationship fields
+    - Default field values
+- Record-level security to manage data access for external objects
+- Record types to customize external data
+- Productivity Tools
+    - Activities, Events, and Tasks
+    - Attachments
+    - Notes
+
+The first time a data row is retrieved from an external system, the external object record is assigned a Salesforce ID. Each record ID remains associated with the same external data row, unless the external object is deleted from the org.  
+Select **Writable External Objects** when you define an external data source and use Salesforce Connect external objects to create, update, and delete data. External objects are read only by default.  
+  
+SF Platform features support by SF Connect:
+- Reports - Depending on network latency and the availability of the external system, reports that include an external object can take a long time to run.
+- Record Feed - View the Chatter feed associated with external object records you follow to see updates about the record. Following records helps keep you up to date on important changes to the external objects.
+- Quick Actions - External objects support quick actions, except when the actions involve features or functionality that are incompatible with external objects.
+- Flows and Processes - You can build flows and processes that include external objects and automate your organization’s repetitive business tasks.
+- Salesforce App - You can view and search external objects from the Salesforce mobile app, Salesforce on the go!
+- Salesforce Console - You can access external objects from the Salesforce console only in Salesforce Classic. Other consoles, such as the Salesforce console in Lightning Experience, aren’t supported.
+- More Features Supported by Salesforce Connect - External objects are available to Salesforce APIs, SOQL queries, SOSL and Salesforce searches, SOQL queries, packages, Metadata API, change sets, and Lightning Experience app.  
+  
+An external data source specifies how to access an external system. **Salesforce Connect** uses external data sources to access data that's stored outside your Salesforce organization. **Files Connect** uses external data sources to access third-party content systems. External data sources have associated external objects, which your users and the Lightning platform use to interact with the external data and content.  
+  
+### [Large Data Volumes](https://trailhead.salesforce.com/content/learn/modules/large-data-volumes?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+  
+**Data skew** happens when more than 10,000 child records are associated with the same parent record within an org.  
+Types of data skew:
+- Account data skew
+    - Record locking
+    - Sharing issues
+  - Ownership skew - can cause performance issues due to sharing calculations required to manage visibility
+  - Lookup skew - large number of records assoc. with one record in the lookup object.
+  
+Types of relationships to external objects
+| Realationship | Allowed Child Object | Allowed Parent Objects | Parent Field for Matching Records |
+|---|---|----|---|
+| Lookup | Standard / Custom / External | Standard / Custom | 18-char SF record ID |
+| External Lookup | Standard / Custom / External | External | the External ID standard field |
+| Indirect Lookup | External | Standard / Custom | You select a custom field w. External ID and unique attributes |
+
+**SOQL vs. SOSL Queries** -  the governor limit for SOSL queries is 2,000; for SOQL queries it’s 50,000.  
+**The Force.com query optimizer** maintains a table of statistics about the distribution of data in each index to perform pre-queries to determine whether using the index can speed up the query.  
+You can query and process up to _50 million records_ using **Batch Apex**.  
+A **bulk query** can retrieve up to _15 GB_ of data, divided into fifteen 1 GB files. If the query doesn’t execute within the standard two-minute timeout limit, the job fails and a **QUERY_TIMEOUT** error is returned.  
+A **skinny table** is a custom table in the Force.com platform that contains a subset of fields from a standard or custom base SF object.
+  
+**Load Your Data**  
+Loading Lean:
+- Identifying the business-critical operations before moving users to SF
+- Identifying the minimal data set and configuration required to implement those operations.
+- Defining a data and configuration strategy based on the requirements you’ve identified.
+- Loading the data as quickly as possible to reduce the scope of synchronization.
+  
+Consider these before loading data:
+- OWD - Private Sharing Model will require more time to load then Public. If possible, load with Public and change to Private later.
+- Complex object relationships - the more lookups the more checks to be done when loading. Try to minimize lookup and add some after the load.
+- Sharing Rules - see above.
+- Worflow rules, validation rules, and triggers - try to disable them during the massive data loads.
+  
+Using **Bulk API** for LDV allows for super-fast processing speeds, along with reduced client-side programmatic language, easy-to-monitor job status, automatic retry of failed records, support for parallel processing, minimal roundout trips to Force.com, minimal API calls, limited dropped connections, and easy-to-tune batch size.  
+  
+**Temporarily disabling triggers** is a little more complex and requires some preparation. First, create a Custom Setting and a corresponding checkbox field to control when a trigger should fire. Then include a statement in your trigger code like the one highlighted in this example.  
+```
+trigger setDefaultValues on Account (before insert, before update){
+    Load_Settings__c s = Load_Settings__c.getInstance(UserInfo.GetUserID());
+    if(s.Load_Lean__c) return; // Skip Trigger
+...
+}
+```
+Once this is done, disabling or enabling your trigger is as simple as editing the checkbox field.  
+  
+**PK (_Primary Key_) chunking** splits bulk queries on very large tables into chunks based on the record IDs of the queried records. Enable PK chunking when querying tables with more than 10 million records or when a bulk query consistently times out.  
+**Truncating** a custom object erases all records currently sitting in the custom object’s Recycle Bin; the custom object’s history; and related events, tasks, notes, and attachments for each deleted record.
