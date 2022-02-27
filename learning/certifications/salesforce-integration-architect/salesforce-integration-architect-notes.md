@@ -724,4 +724,8 @@ trigger setDefaultValues on Account (before insert, before update){
 Once this is done, disabling or enabling your trigger is as simple as editing the checkbox field.  
   
 **PK (_Primary Key_) chunking** splits bulk queries on very large tables into chunks based on the record IDs of the queried records. Enable PK chunking when querying tables with more than 10 million records or when a bulk query consistently times out.  
-**Truncating** a custom object erases all records currently sitting in the custom object’s Recycle Bin; the custom object’s history; and related events, tasks, notes, and attachments for each deleted record.
+**Truncating** a custom object erases all records currently sitting in the custom object’s Recycle Bin; the custom object’s history; and related events, tasks, notes, and attachments for each deleted record.  
+  
+### [Understanding Outbound Messaging](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_om_outboundmessaging_understanding.htm)
+  
+  
