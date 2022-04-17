@@ -8,7 +8,7 @@
 - Create an accurate sandbox and plan your test using key personas. Full copy sandbox recommended.
     - Draw a system diagram to show current and future state, and users. For each part estimate peak, average load levels and feature use. Consider user arrival, login rates, which pages are viewed, and page views per session.
     - Estimate the size and shape of your data.
-    - In the sandbox, imnclude any complex relationships, role hierarchies, and sharing rules.  
+    - In the sandbox, include any complex relationships, role hierarchies, and sharing rules.  
 `Don't use sandbox as a benchmark of production performance and vice versa`  
 Identify the key personas for the org and plan test around their workflows.
 
@@ -16,16 +16,16 @@ Identify the key personas for the org and plan test around their workflows.
 Create test that evaluate your networks, key personas, and data loading.  
 Prior to that measure your [browser octane score](https://help.salesforce.com/s/articleView?id=sf.console2_technical_requirements.htm&type=5). To run the test, append speedtest.jsp to your org’s domain:  
 ``https://MyDomainName.lightning.force.com/speedtest.jsp``  
-Resolve any performance issue before testing the org.  
+Resolve any performance issues before testing the org.  
 Define scope for each test, components, metrics. Run tests multiple times, at regular intervals.  
 
-Performance is measured in **Experinced Page Time**:
+Performance is measured in **Experienced Page Time**:
 - Add an EPT counter to the header of your app  
 `https://MyDomainName.lightning.force.com/one/one.app?eptVisible=1`
 - Use the Lightning Usage App to view page and browser performance
 - Build a custom report using Lightning Usage App objects
 - Use the Event Monitoring Analytics App to monitor performance with event types  
-Also user browser developer tools to test performace.
+Also use browser developer tools to test performace.
 
 ### [Congratulations! You Inherited a Mature Org...Now What?](https://www.salesforce.com/video/1770820/)
 *Org Assessment*
@@ -52,7 +52,7 @@ Share records and get updated data on shared records.
 *Available in Classic*  
 - Enable SF to SF
     - When enabled in Setup, Connection User is created with Partner Network profile.
-- Connect with you partners using the COnnection Finder
+- Connect with you partners using the Connection Finder
     - Enable, find out orgs that have Salesforce, Invite partners, Accept an invitation
 - Publish/subscribe objects, fields
 - Share records from SF to SF
@@ -82,7 +82,7 @@ Share records and get updated data on shared records.
 >
 >Integrations methods:
 >- Heroku Connect
->    - data reolication and data proxies
+>    - data replication and data proxies
 >    - Heroku Postgres DB
 >    - one way or bi-directional
 >    - OData protocol and OData wrapper (RESTful endpoints)
@@ -99,7 +99,7 @@ Share records and get updated data on shared records.
 >- Callouts
 >    - from SF to call external processe on Heroku
 >- Canvas
->    - load external UI to Salesforce that can intercat with SF data using JS API
+>    - load external UI to Salesforce that can interact with SF data using JS API
 >
 >General suggestions for integrations:
 >- To replicate data between Salesforce and Heroku, use Heroku Connect.
@@ -158,7 +158,7 @@ Share records and get updated data on shared records.
 >5. **API limits and allocations**: How many API resources are your resources using?
 >    - `sfdx force:limits:api:display -u [alias or username]`  
 >
->**Enf of prerequisites to the trail**  
+>**End of prerequisites to the trail**  
 
 **Common types of integration initiatives for the Salesforce Lightning Platform**
 | Integration Initiative | Description |
