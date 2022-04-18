@@ -205,7 +205,8 @@ Each *layer* represents a division of tasks in the system:
 Integration patterns that follow Salesforce -> System pattern benefit from incorporating *Shield Platfrom Encryption*  
 **Error Handling and Recovery**  
 - Error Handling - when an error occurs, the caller manages error handling
-- Recovery - chnages aren't committed to Salesforce until the caller recives the successful response  
+- Recovery - changes aren't committed to Salesforce until the caller recieves the successful response  
+
 **Coupling**  
 Each solution relies on different dependencies across systems:
 - technology requirements
@@ -230,7 +231,7 @@ To avoid sending multiple duplicate requests (a user clicks a button multiple ti
 **Connectors for Data Integration**  
   
 ***Mulesoft Salesforce Connector***  
-Salesforce Connector can be used by a Mule App to connect to and from Salesforce or other data sources. The processing logic happens within the Mule Integration App. he Mule App works as the go-between, avoiding point-to-point integrations, and *decoupling* the two systems.  
+Salesforce Connector can be used by a Mule App to connect to and from Salesforce or other data sources. The processing logic happens within the Mule Integration App. The Mule App works as the go-between, avoiding point-to-point integrations, and *decoupling* the two systems.  
   
 ***MuleSoft Database Connector***
 Works alongside any Java Database Connectivity (JDBC) accessible database, including Postgres.  
