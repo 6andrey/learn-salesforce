@@ -1,5 +1,12 @@
 # Architect Journey: Integration Architecture
 
+### Recommendations from the learner
+- Pay attention to the business case examples that can be found on the trailmix's trailhead modules as well as Salesforce help articles. These notes don't include examples.  
+- Learn the differences between various APIs.
+- Learn when syncronous vs. asyncronous integration needed.
+- Pay attention to what integration tools needed for work with gateways, firewalls, etc.
+
+
 ## Evaluate Current System Landscape
 - Exam Weight: 8%
 ### [Measure Performance for Your Salesforce Org](https://help.salesforce.com/s/articleView?id=sf.technical_requirements_measuring_ept.htm&type=5)
@@ -313,7 +320,48 @@ The Integration Architecture Has a Clearly Defined Standard for Applying Differe
 ## Evaluate business needs
 Exam Weight: 11%
 
-### [Governance Basics](https://trailhead.salesforce.com/content/learn/modules/governance-basics?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+### [Governance Basics](https://trailhead.salesforce.com/content/learn/modules/governance-basics?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)
+
+**Governance** is a framework for how organizations operate and make decisions.
+Benefits of governance:
+- Comliance - tech systems to comply with security ans/or regulatory requirements (system access, security, data privacy)
+- Risk Assessment - evaluating and managing the risk
+- Cost Effeciencies - to focus on things that produce most value
+- Velocity - prirotization of new initiatives to focus on rights things and quickly adapt to business changes
+
+Project key stakeholders:
+- Information Technology
+- Business Units
+- End Users
+
+Rolese and Responsibilities:
+- Business side to own the project vision and strategy
+- Business side to gather and prioritise requirements
+- Business side to gather end-user feedback
+- Business side to onboard users
+- Business side to own and manage the budget
+- Business side to designate product owner
+- IT Side to build and maintaing systems
+- IT Side to provide accurate estimates of effort
+- IT Side to define the release schedule
+- IT Side to test systems
+- IT Side to support systems
+
+Lean Governance Framework includes key processes
+1. Vision and strategy. Vision is what you want to do, and strategy is how to do it. They should be reularly reviewed and updated.
+2. Business backlog - is a complete list of prioritized business requirements. This process is owned by business units with support from IT
+3. Software development lifecycle - technical governance for the release cadence, migration of new functionality between environments, QA testing
+4. Data strategy, archtecture and management. Formalize integration strategy.
+5. Communication strategy. Best practices to use: * involve leadership, * use various comm. channels, * reducd noise, * ensure comm. are valuable
+
+Operating Models
+- Centalized - a single governance framework with one set of processes and focused on one solution
+- Decentralized - a federated framework with independent governance frameworks, different set of processes for different business units. For orgs that use multiole SF orgs
+- Hybrid - common framework with each business unit having own autonomy
+
+Core Committees
+- Executive Steering Committee - owns overall vision and strategy, sets priorities and oversees overall project budget. The final escalation point.
+- Project Management Committee - manages day to day details of all major projects
 
 ### [Key Principles for a Successful Salesforce Implementation Part III: Governance](https://medium.com/salesforce-architects/key-principles-for-a-successful-salesforce-implementation-part-iii-governance-b2a165f431c3)
 
@@ -327,14 +375,16 @@ Transition from unprincipled to principled governance. Adding a 'principle check
 - Change management - before a release or change is approved for deployment
 
 **Managing the Principle Lifecycle**  
-Principles should not chnage often, however, adapting of business reuirements will to adapting of principles
+Principles should not be changed often, however, adapting of business reuirements will to adapting of principles
 
 ## Translate needs to Integration Requirements
 Exam Weight: 22%
 
 ### [Certificates and Keys](https://help.salesforce.com/s/articleView?id=sf.security_keys_about.htm&type=5)
 
-Salesforce certificates and key pairs are used for signatures that verify a request is coming from your organization. They can be exported into a keystore for storage or import certificates and keys from a keystore. This allows you to move keys from one organization to another. The exported file is in Java Keystore format.  
+Salesforce certificates and key pairs are used for signatures that verify a request is coming from your organization, re used for authenticated SSL communications with an external web site, or when using your organization as an Identity Provider. You only need to generate a Salesforce certificate and key pair if you're working with an external website that wants verification that a request is coming from a Salesforce organization.  
+
+They can be exported into a keystore for storage or be import from a keystore. This allows you to move keys from one organization to another. The exported file is in Java Keystore (JKS) format. 
 
 **API Client Certificate** is used by workflow outbound messages, the AJAX proxy, and delegated authentication HTTPS callouts. For security reasons, the API client certificate should be known only to your org.
 Choose an API client certificate based on the remote endpoint you connect to. Some endpoint servers require a certificate chain that is trusted by a certificate authority; others are fine with directly trusting a self-signed certificate.
@@ -343,8 +393,9 @@ Choose an API client certificate based on the remote endpoint you connect to. So
 - **Generate a Certificate Signed by a Certificate Authority**  
 `Setup -> Certificate and Key Management -> Create CA-Signed Certificate`  
 Send the certificate request to certificate authority. After it's signed, upload the certificate...  
-- **Set Up a Mutual Authentication Certificate** - to prevent security from being compromised by simple impersonation, you can require clients and servers to prove their identity to each other with a mutual authentication certificate.  
-`Certificate and Key Management -> Upload Mutual Authentication Certificate`  
+- **Set Up a Mutual Authentication Certificate** - to prevent security from being compromised by simple impersonation, you can require clients and servers to prove their identity to each other with a mutual authentication certificate.   
+`Certificate and Key Management -> Upload Mutual Authentication Certificate`, Enable the `Enforce SSL/TLS Mutual Authentication` user permission for an `API Only` user. This “API Only” user configures the API client to connect on port `8443` to present the signed client certificate.  
+A `certificate chain` is a hierarchical order of certificates where one certificate issues and signs another certificate lower in the hierarchy. Upload a certificate chain as a single PEM-encoded CA-signed certificate representing the concatenated chain of certificates. The uploaded certificate chain must include the intermediate certificates in the order: server or client certificate -> its signing certificate
 - **Manage Master Encryption Keys** - Encrypted custom fields, such as Social Security Number or Credit Card Number, are encrypted with a master encryption key. This key is automatically assigned when you select fields to encrypt. You manage your own master key according to your organization’s security and regulatory needs.  
 
 ### [Configure Remote Site Settings](https://help.salesforce.com/s/articleView?id=sf.configuring_remoteproxy.htm&type=5)
@@ -354,20 +405,23 @@ Before any Visualforce page, Apex callout, or JavaScript code using XmlHttpReque
 
 ### [Build Integrations Using Connected Apps](https://trailhead.salesforce.com/en/content/learn/trails/build-integrations-using-connected-apps?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
   
-A **connected app** is a framework that enables an external application to integrate with Salesforce using APIs and standard protocols used to authorize, authenticate, and provide single sign-on (SSO) for external apps.  
+A **connected app** is a framework that enables an external application to integrate with Salesforce using APIs and standard protocols (SAML, OAuth, OpenID Connect) used to authorize, authenticate, and provide single sign-on (SSO) for external apps.  
   
 **Benefits of using conected apps**:
-- Access data with API integration - to pull data from your SF org.
-- Integrate service providers with your SF. E.g. when SF acts as identity provider.
-- Provide authorization to external API gateways - SF acts as independent OAuth authorization server.
-- Manage access to third-party apps - e.g. to control what data 3rd-party has access to in SF.
+- Access data with API integration - to pull data from your SF org. Several OAuth 2.0 authorization flows may be used depending on the type of connected app
+- Integrate service providers with SF. E.g. when SF acts as identity provider. SAML 2.0. SF support SAML SSO. E.g. create a connected app with SAML, so SF is configured as identity provider, and users will be able to login into external app with SF credentials. A connected app may also be with OpenID Connect to integrate a service provider with SF (Service Provider must accepts OpenID tokens).
+- Provide authorization to external API gateways - SF acts as independent OAuth authorization server. OpenID Connect dynamic client registration may be used to dynamically clent client apps as connected apps in SF. SF then can authorize those connected apps to access protected resource hosted by 3rd-part services.
+- Manage access to third-party apps - e.g. to control what data 3rd-party has access from SF.
   
 **Who does what**:
 - Connected developer - builds API integrations or external apps that can access SF data as a connected app.
 - Connected app admin - installs, uninstalls, blocks connected apps from SF org, configures permissions and policies.
 
 **Access Data with API Integration**  
-  
+Connected app may be used to request access to SF data on the behalf of an external app. A connected app it needs to be integrated with the S API using the OAuth 2.0 protocol (an open protocol that enables authorization and secure data sharing between applications through the exchange of tokens). Developers use OAuth APIs to integrate their app with SF. These OAuth APIs enable a user to work in one app but see the data from another.
+
+SF mobile app uses OAuth 2.0 authorization flow to get access to SF data.
+
 ***Connected App and OAuth Terminology***
 - Access Token - can be used instead of user's SF credentials
 - Authorization Code - token that represents access granted to the end user, used in OAuth 2.0
@@ -392,11 +446,12 @@ A **connected app** to establich access to SF data using API has to use **OAuth 
 5. App starts
 
 Ongoing authorization flow:
-1. If the session is active, app starts immediately. If the sessio is stale, app uses refresh token to get updated session.
+1. If the session is active, app starts immediately. If the session is stale, app uses refresh token to get updated session.
 2. App starts.
   
-**Web API integration (OAuth 2.0 Web Server Flow)**  
-1. Connected app directs user to SF to authenticate and authorize the app to access SF data
+**Web APP integration (OAuth 2.0 Web Server Flow)**  
+To integrate external web app with SF API  
+1. User clicks the external app. Connected app directs user to SF to authenticate and authorize the app to access SF data
 2. The user approves the app access to data
 3. SF sends a callback to the app with authorization code
 4. The app passes the code to the SF token endpoint, requesting access token
@@ -406,7 +461,7 @@ Ongoing authorization flow:
 8. The app gets access to protected data
   
 **Mobile app integration (OAuth 2.0 User-Agent Flow)** (using SF mobile SDK)
-1. Conencted app directs the user to SF to authenticate and authorize the mobile app
+1. Connected app directs the user to SF to authenticate and authorize the mobile app
 2. The user approves access for the authorization flow
 3. The app receives callback from SF to redirect URL, which extracts access and refresh tokens
 4. The connected app uses access token to access data on user's behalf
@@ -428,7 +483,7 @@ Identity provider vs. service provider:
 A connected app, that implements SAML 2.0, can be used to intergrate a service provider with SF org for user authentication. Use it if your org already uses SAML.  
   
 **Integrate a Service Provider with OpenID Connect**  
-A connected app, that implements OpenID Connect, can be used to intergrate a service provider with SF org for user authentication. The service provider must accept OpenID Connect tokens.  
+A connected app, that implements OpenID Connect, can be used to intergrate a service provider with SF org for user authentication. The service provider must accept OpenID Connect tokens. Unlike SAML, it adds an authentication layer on top of OAuth 2.0 to enable secure exchange of ID tokens that contain user informatioon with OAuth access tokens.  
   
 **Provide Authorization for External API Gateways**  
   
@@ -447,8 +502,9 @@ Protect secrets from:
   
 Store app secrets in Salesforce:
 - Named Credential - URL of a callout endpoint and its required authentication parameters in one definition. 
-    - Once created, you can replace URL references in your code with references to the named credentials, which results in cleaner, simpler, and more secure code.
+    - Once created, you can replace URL references in your code with references to the named credentials, which results in cleaner, simpler, and more secure code, as it also allows to skip setting Remote Site Settings.
     - Admins, users with View All data, Modify All Data, Author Apex permissions have access named credentials
+    - Named Credentials are supported in thse types of callout definitions: Apex callouts, External Data Source - SF Connect (OData 2.0, 4.0, Custom), External Services.
 - Distributed Secrets - admin access can be prevented with creating managed packages
 - Protected Custom Settings and Protected Custom Metadata Types
     - custom settings can be used to store sensitive information or secrets. Protected custom setting in managed package aren't visible for subscribing orgs through Apex or API
@@ -515,7 +571,13 @@ Change event triggers run **asynchronously** after the database transaction is c
     // ...
 }
 ```
-  
+**Differences Between Platform Events and Other Streaming Events**
+Other events include **PushTopic** and generic events. With PushTopic events, clients receive messages about changes in Salesforce records based on a predefined query. With generic events, you can send and receive arbitrary message content (payloads) not necessarily tied to Salesforce records. Platform events are similar to generic events but offer more powerful customization. With platform events, you can publish any custom data. You define the schema of event data at a granular level as typed fields. Also, you can use platform events in native Salesforce platform apps and external apps alike. Use platform events in the following cases:
+
+To send and receive custom event data with a predefined schema
+To publish or subscribe to events in Apex
+For the flexibility of publishing and processing events on and off the Salesforce platform
+
 ## Design Integration Solutions
 Exam Weight 28%  
   
@@ -727,6 +789,4 @@ Once this is done, disabling or enabling your trigger is as simple as editing th
 **PK (_Primary Key_) chunking** splits bulk queries on very large tables into chunks based on the record IDs of the queried records. Enable PK chunking when querying tables with more than 10 million records or when a bulk query consistently times out.  
 **Truncating** a custom object erases all records currently sitting in the custom object’s Recycle Bin; the custom object’s history; and related events, tasks, notes, and attachments for each deleted record.  
   
-### [Understanding Outbound Messaging](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_om_outboundmessaging_understanding.htm)
-  
-  
+### [Understanding Outbound Messaging](https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_om_outboundmessaging_understanding.htm)  
