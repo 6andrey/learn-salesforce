@@ -107,4 +107,114 @@ A Salesforce user can be the owner of up to 50,000 person or business account po
 
 ### [Single Sign-On Implementation Guide](https://help.salesforce.com/s/articleView?id=sf.sso_about.htm&type=5)
 
-... to be continued...
+**Federated Authentication** is available in: All Editions
+**Delegated Authentication** is available in: Professional, Enterprise, Performance, Unlimited, Developer, and Database.com Editions
+**Authentication Providers** are available in: Professional, Enterprise, Performance, Unlimited, and Developer Editions
+
+SSO use cases:
+- Salesforce as the Service Provider or Relying Party
+  - Users are logged in to your org from an identity provider or authentication provider, which authenticates their credentials.
+  - Define identity provider with SAML, use predefined auth provider with OpenID, or create custom auth provider
+- Salesforce as the Identity Provider or OpenID Connect Provider
+  - Users are logged in to an external app with their Salesforce credentials.
+  - Configure the external app as connected app, define SF org as the SAML identity provider
+  - Also, use OpenID Connect to enable SF as OpenID provider
+- Salesforce as Both
+  - Salesforce to act as both the identity provider and the service provider
+  - Chain identity providers with SAML or OpenID Connect exclusively
+  - Users to login to SF org from Google and then have acces to SF mobile custom app. Configure Google as SAML identity provider for your SF org. Thjen configure your SF org as SAML identity provider for the mobile app
+- Salesforce and Delegated Authentication
+  - Users to log in to multiple apps with the same user credentials. E.g. users can separately log into SF, Amazon and Google using the same credentials.
+  - Manage delegated authentication on a permission set level rather then on an org level
+  - LDAP server can be integrated with SF to configure delegated authentication
+  - Delegated authentication can be also configured with a token instead of a password
+
+SSO terminology
+- Federated Authentication and Security Assertion Markup Language (SAML). These terms apply to SSO enabled with SAML.
+  - Federated Authentication. With federated authentication, users log in one time to access multiple apps. For example, you log in to your Salesforce org and from there can access your company’s benefits app, Workday.
+  - Security Assertion Markup Language (SAML). SAML is an open standard authentication protocol that you can use to implement SSO in your Salesforce org. SAML allows identity providers and service providers to securely exchange user information, enabling user authentication between services.
+  - Identity Provider. An identity provider acts as a trusted service that authenticates a user’s identity.
+  - Service Provider. A service provider is the application a user wants to access, such as a Salesforce org or a third-party app like Workday.
+  - SAML Request. When a user attempts to access the service provider, the service provider sends a SAML request asking the identity provider to authenticate the user.
+  - SAML Response. To authenticate the user, the identity provider sends a SAML response to the service provider. The response contains a signed SAML assertion with facts about the user.
+  - SAML Assertion. A SAML assertion, which is part of a SAML response, describes a user by asserting facts, like username or email address. During authentication, the identity provider signs the SAML assertion and the service provider validates the signature.
+  - Just-in-Time (JIT) Provisioning. Use JIT provisioning with SAML SSO to automatically register a user account with the service provider the first time a user logs in. For example, a new employee logs in to Salesforce for the first time with SAML SSO. JIT provisioning automatically registers a new user account in your Salesforce org for the employee.
+- OpenID Connect and Custom Authentication Protocols. hese terms apply to SSO enabled with OpenID Connect. Some terms, where noted, apply to both OpenID Connect and similar, custom authentication protocols.
+  - OpenID Connect is an open standard authentication protocol built on top of OAuth 2.0. With OpenID Connect, the relying party and OpenID provider can exchange information about who a user is and what they can do with a service.
+  - Custom Authentication Protocol - describes any custom authentication protocol that can be used with an authorization service, such as OAuth. Such protocols have the same core functions as OpenID Connect, but they don't conform to the OpenID Connect standard.
+  - OpenID Provider - authenticates users as requested by the relying party.
+  - Authentication Provider is a framework that allows you to connect Salesforce to a third party for authorized data access, authentication, or both, depending on the protocol. When you're using authentication providers, Salesforce is always the relying party.
+  - Relying Party - a service provider. It relies on the OpenID provider or identity provider for authentication.
+
+**SAML SSO Flows**
+
+Service Provider-Initiated SAML Flow
+In a service-provider-initiated flow, the service provider begins the login process with a SAML request to the identity provider. Here’s how this flow works.
+1. The user requests a secure session to access a protected resource in the service provider. For example, the user clicks a link to fill out a form in the service provider. But the form is a protected resource, meaning the user can only access it after logging in.
+2. The service provider initiates login by sending a SAML request to the identity provider, asking it to authenticate the user.
+3. The identity provider sends the user to a login page.
+4. The user enters their identity provider login credentials and the identity provider authenticates the user.
+5. The identity provider now knows who the user is, so it sends a cryptographically signed SAML response to the service provider. The SAML response contains a SAML assertion that tells the service provider who the user is.
+6. The service provider validates the signature in the SAML response and identifies the user.
+7. The user is now logged in to the service provider and can access the protected resource.
+
+Identity Provider-Initiated SAML Flow
+In an identity provider-initiated login flow, a SAML request is unnecessary because the identity provider starts the flow with a SAML response. An identity provider-initiated flow is a shortened version of a service provider-initiated flow. Here’s how this flow works:
+1. The user logs in to the identity provider.
+2. The user clicks a button or link to access the service provider. For example, the user clicks an app on the App Launcher page in a Salesforce 3. org.
+3. The identity provider initiates login by sending a cryptographically signed SAML response to the service provider. The SAML response contains a SAML assertion that tells the service provider who the user is.
+4. The service provider validates the signature in the SAML response and identifies the user.
+5. The user is now logged in to the service provider.
+
+You can customize these pages for SAML SSO using external identity providers:
+- Identity Provider Login Page
+- RelayState parameter to control where users are directed after successful login
+- Custom Logout Page
+- Custom Error Page (optional)
+
+Configure Salesforce as a service provider with SAML single sign-on (SSO):
+1. Set up SSO.
+2. (Optional) Set up an identity provider to encrypt SAML assertions.
+3. (Optional) Enable JIT provisioning. For more information about JIT provisioning, see Just-In-Time Provisioning for SAML.
+4. If you selected Custom SAML JIT with Apex Handler for JIT provisioning, edit the SAML JIT handler.
+5. Test the SSO connection.
+
+**Just-in-Time Provisioning for SAML**
+With JIT provisioning, your identity provider passes user information to Salesforce in a SAML 2.0 assertion, which is processed by an Apex JIT handler class. The JIT handler does the heavy lifting of creating and updating user accounts. To let Salesforce manage the JIT handler for you, configure standard JIT provisioning. If you want more control, configure JIT provisioning with a custom handler. 
+
+Authentication Providers
+Social sign-on
+
+- Use Salesforce Managed Authentication Providers (Facebook, GitHub, Google, LinkedIn, Salesforce, and Twitter)
+- Choose an Authentication Provider to Configure Salesforce as the Relying Party
+- Add an Authentication Provider to Your Org’s Login Page
+- Add an Authentication Provider to Your Experience Cloud Site’s Login Page
+- Add Request Parameters to an Authentication Provider
+
+**Salesforce as an Identity Provider**
+
+**Salesforce as Both the Service Provider and Identity Provider**
+- Create an Identity Provider Chain. In an identity provider chain, Salesforce sits in the middle, linking a third-party identity provider with a client app.
+- Configure SAML SSO Between Multiple Orgs or Experience Cloud Sites. If your company deploys multiple Salesforce orgs or sites, you can configure an org or site as the identity provider for one or more service provider orgs or sites. With this SAML SSO solution, you save your users from managing multiple passwords.
+- Configure SSO Between Orgs with the Salesforce Authentication Provider. Salesforce can act as an authentication provider for other orgs, allowing your users to log in to an org acting as the relying party with credentials from the authentication provider. 
+
+**Single Logout**
+With single logout (SLO), your users can log out from a single application and be automatically logged out from all connected apps. To use SLO, the identity providers, service providers, and relying parties must be configured for single sign-on (SSO) and registered for SLO.
+
+SF supports the following protocols (SLO can be initiated from the identity provider or any of the connected apps):
+- SAML SLO as an identity provider or service provider
+- OpenID Connect SLO as an identity provider or relying party
+Salesforce supports session index parameters in requests and responses with SAML SLO. When a user logs out of a connected app registered for SAML SLO, the session index parameter is required to identify which user session to end.
+
+**Delegated Authentication**
+With delegated authentication, one system relies on another system to validate user credentials.
+The process Salesforce uses to authenticate users with delegated authentication:
+1. When a user tries to log in—either online or using the API, SF tries to validate the username and checks the user’s permissions and access settings.
+2. If the is SSO enabled for the user, SF calls to the SOAP-based SSO web service to validate the username and password.
+3. The web service call passes the username, password, and source IP to your SSO web service implementation, which SF servers then access. The source IP is the address where the login request originated.
+4. Your SSO web service implementation validates the passed information and returns either true or false.
+5. When the response is true, the login process continues and the user is logged in to your org. When false, the user gets an error message that the username and password combination is invalid.
+
+### [Deploying Single Sign-On and Identity for Employees, Customers, and Partners](https://www.youtube.com/watch?v=swguz0ZKggM)
+Youtube clip ~40 min
+
