@@ -218,3 +218,31 @@ The process Salesforce uses to authenticate users with delegated authentication:
 ### [Deploying Single Sign-On and Identity for Employees, Customers, and Partners](https://www.youtube.com/watch?v=swguz0ZKggM)
 Youtube clip ~40 min
 
+### [Auditing](https://help.salesforce.com/s/articleView?language=en_US&type=5&id=sf.security_overview_auditing.htm)
+
+- Record Modification Fields. All objects include fields to store the name of the user who created the record and who last modified the record. This provides some basic auditing information.
+- Login History. You can review a list of successful and failed login attempts to your organization for the past six months. Who logged in, at what time, and from where, Authentication Method References, HTTP Login Method, SAML Single Sign-On, My Domain, License Manager Users.
+- Field History Tracking. You can also enable auditing for individual fields, which will automatically track any changes in the values of selected fields. Although auditing is available for all custom objects, only some standard objects allow field-level auditing. Field history data is retained for up to 18 months through your org, and up to 24 months via the API.
+- Setup Audit Trail. Administrators can also view a Setup Audit Trail, which logs when modifications are made to your organization’s configuration. Last 180 days.
+
+### [Shield Platform Encryption](https://trailhead.salesforce.com/content/learn/modules/spe_admins)
+
+The basis of encryption is scrambling and unscrambling. **Keys** do the scrambling and unscrambling, and secrets keep your keys safe and working properly. A key is a string of bits that scramble and unscramble data. **Secrets** are pieces of keys. That is, they work together in a variety of ways to secure your data. Secrets combine to create encryption keys, allow servers to double-check and verify that a key is up to date, and verify that requests for access to your data are from authorized key holders.
+
+**Tenant secrets** and **master secrets** are keys for keys, or that extra layer of protection. Master secret is generated 3 times a year, with each release.
+
+Classic Encryption vs. Shield Platform Encryption:
+- Classic Encryption is included in a base price of SF license, and can protect a special type of custom text field with 128-bit AES keys.
+- Shield Platform Encryptiom is available in Developer Edition and requires a purchase for all other editions. It can encrypt all kind of data at reston SF Platfrom, with a stronger 256-bit AES key. It allows to search for encrypted data in database.
+
+Field values are encrypted only in records created or updated after encryption is enabled.
+
+Best Practices:
+- Encrypt Only Where Necessary
+  - Define a threat model for the organization. Create a data classification scheme and to decide which data to encrypt.
+  - Not all data is sensitive. Focus on information that requires encryption to meet regulatory, security, compliance, and privacy requirements.
+  - Create a data classification scheme early.
+- Assign Permissions and Key Access Judiciously
+  - Create a strategy early for backing up and archiving keys and data. You can’t reset a tenant secret. Salesforce can’t help with deleted, destroyed, or misplaced tenant secrets. 
+  - Grant the “Manage Encryption Keys” permission to authorized users only.
+  - Understand that encryption applies to all users, regardless of permissions. 
