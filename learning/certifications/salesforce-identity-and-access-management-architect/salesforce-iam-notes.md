@@ -246,3 +246,153 @@ Best Practices:
   - Create a strategy early for backing up and archiving keys and data. You can’t reset a tenant secret. Salesforce can’t help with deleted, destroyed, or misplaced tenant secrets. 
   - Grant the “Manage Encryption Keys” permission to authorized users only.
   - Understand that encryption applies to all users, regardless of permissions. 
+
+### [Secure Your Apps with Salesforce Shield](https://trailhead.salesforce.com/en/content/learn/trails/shield?trailmix_creator_id=strailhead&trailmix_slug=architect-identity-and-access-management)
+
+**Event Monitoring** can track events, such as logins, logouts, URI, Lightning (clicks, performance, and errors in Lightning Experience and SF mobile app), VF page loads, API calls, Apex executions, Report exports, etc. - in total of 50 event types. 
+**Event log files** available for download after 24 hours. Retention deopends on SF edition:
+- Developer - 1 day
+- Enterprise, Unlimited, Performace - 1 day. For extra cose - 30 days
+
+[SF Event Log File Browser](https://salesforce-elf.herokuapp.com) is SF connected app allows easily find and download events declaratively.
+
+Use Developer Console: File -> Open -> Objects -> EventLogFile -> Open -> Select fields and create a query.
+
+**Real-Time Event Monitoring**
+
+Salesforce Real-Time Event Monitoring is a user activity and application monitoring service available to Salesforce customers through the purchase of an add-on license. Real-Time Event Monitoring is included in your Salesforce Event Monitoring license. It can be used with Transaction Security to automatically block risky user actions and notify you in real time when they occur.
+
+Using Real-Time Event Monitoring, you can interact with events either by subscribing to standard platform events, or by investigating events stored in big objects.
+- Standard Platform Events. The user’s actions are captured and streamed as a platform event.
+  - Event Objects. Real-Time Event Monitoring objects have three primary uses: streaming data, storing data, and enforcing policies on data. 
+- Big Objects. Some Real-Time Events are stored as big objects so that you can look at historical event data for 6 months to 10 years in the past.
+
+Realt-Time Event Monitoring use cases:
+- Audit user activity - over 15 different events
+- Enforce security policies. you can block an action from occurring.
+- Keep track of app performance
+
+**Enhanced Transaction Security**
+
+**Transaction Security** is a feature that monitors Salesforce events in real time to spot potential trouble based on rules you create. With Transaction Security, you can create policies that consist of events, notifications, and actions.
+
+`To use Transaction Security, you have to first purchase a Salesforce Shield or Salesforce Shield Event Monitoring add-on subscription.`
+
+You can select which actions to take if the policy is triggered:
+- Block the operation.
+- Require a higher level of assurance using multi-factor authentication.
+- Do nothing (this can be useful for testing).
+- Opt-in for Policy notifications, sent via:
+  - Email
+  - In-app notification to the Salesforce app
+  - Both email and in-app notifications
+
+### [Customizing User Authentication with Login Flows](https://www.youtube.com/watch?v=gYes8OLAc-k)
+Youtube clip ~40 min
+
+## Accepting Third-Party Identity in Salesforce
+- Exam Weight: 21%
+
+### [Configure a Salesforce Authentication Provider](https://help.salesforce.com/s/articleView?id=sf.sso_provider_sfdc.htm&type=5)
+
+1. Define the Salesforce authentication provider in your org.
+   1. Setup -> Auth. Providers 
+2. Test the connection.
+   1. In a browser, open the Test-Only Initialization URL on the Auth. Provider detail page. It redirects you to the authentication provider and asks you to sign in. You’re then asked to authorize your app. After you authorize, you’re redirected to Salesforce.
+3. Add the authentication provider to your login page.
+   1. Setup -> My Domain -> Authentication Configuration -> select Auth provider
+
+### [Social Single Sign-On with OpenID Connect](https://www.youtube.com/watch?v=XIFMnzbG5Ew)
+Youtube clip ~20 min
+
+### [Identity 101: Design Patterns for Access Management](https://www.youtube.com/watch?v=_0v3b029sH4&t=822s)
+Youtube clip ~40 min
+
+Design Patterns:
+- Hub-Spoke Model
+  - Authentication to a "Hub" SF org permits access to "Spoke" SF orgs w/o need of explicit sign-on or storing of passwords
+- Interview-based login
+  - Managing multiple login options to a single service
+  - Login discovery approach - Apex hanler lookup logic customized to invoke appropriate auth flow (SSO, OTP, etc.). Username/password no longer required.
+
+### [FAQs for Single Sign-On](https://help.salesforce.com/s/articleView?id=sf.identity_overview.htm&type=5)
+
+- Ways to implement SSO:
+  - Configure SF as identity provider, service provider or both.
+- View SSO errors
+  - Setup -> Login History
+- SSO work outside corporate firewall
+  - Users outside the firewall can use their network password, or they can be required to connect to corporate network first.
+- How to validate SAML response
+  - Setup -> Single Sign-On Settings -> click SAML Validation
+- Test SSO configuration before enabling it
+  - Use sandbox to develop and test config first. Sandbox copies are made with SAML disabled. It cann be enabled on SSO Settings page
+- Prevent users from logging in using their passwords
+  - [Require Users to Log In with SSO](https://help.salesforce.com/s/articleView?id=sf.sso_enforce_sso_login.htm&type=5)
+- Use  MFA for SSO
+  - Use free Salesforce MFA incl. in SF for SSO congurations that use SF as identity provider.
+  - Use 3rd party MFA for SSO
+
+### [Delegated Authentication](https://help.salesforce.com/s/articleView?id=sf.sso_delauthentication.htm&type=5)
+One system relies on another system to validate user credentials. With delegated authentication, users must log in to each app separately. Salesforce has no control over the passwords used to log in to your org. Instead, the external authentication method controls user passwords and associated policies.
+Enable the Is Single Sign-On Enabled user permission to hand control of user passwords to the external authentication method.
+
+1. When a user tries to log in—either online or using the API, Salesforce tries to validate the username and checks the user’s permissions and access settings.
+2. If the **Is Single Sign-On Enabled** user permission is enabled, Salesforce calls to the SOAP-based SSO web service to validate the username and password.
+
+*Salesforce immediately disposes of the password without storing, logging, or viewing it.*
+
+3. The web service call passes the username, password, and source IP to your SSO web service implementation, which Salesforce servers then access.
+4. Your SSO web service implementation validates the passed information and returns either true or false.
+5. When the response is true, the login process continues and the user is logged in to your org. When false, the user gets an error message that the username and password combination is invalid.
+
+FAQs for Delegated Authentication:
+- Requirements for implementing my web service
+  - The implementation must be accessible by SF servers, so deploy the web service on a serverver in your DMZ. Use your server external DNS name when enterin the delegated URL in SSO settings
+  - Make the web service available by TLS. A cerificate from a trusted provider is required.
+- Mapping considerations
+  - Map your org's internal usernames to SF usernames. Generate your server stub from the WSDL file to ensure accuracy.
+- Password resets
+  - Password resets are disabled for delegated authentication
+- View errors
+  - Setup -> Delegated Authentication Error History
+
+Configure Salesforce for Delegated Authentication:
+1. Enable delegated authentication for your org.
+   1. Setup -> SSO Settings -> select `Disable login with Salesforce credentials`
+2. Build your web service.
+   1. Setup -> API -> click `Download Delegate Authentication WSDL`. Use WSDL file to generate a server-side stub to which to add your delegated authentication implementation.
+   2. Add a link to your corporate intrantet or internal web-site. This link takes the user’s credentials after they’re validated and passes them through an HTTP POST to the Salesforce login page. SF only uses the password field to pass it back to your company. To avoid passing your corporate passwords to or from SF, pass another authentication token instead, such as a Kerberos ticket. When the SF server passes the credentials back to you in the Authenticate message, verify them. Then the user can access your org.
+3. Specify your delegated authentication gateway URL.
+   1. Setup -> SSO Settings -> click Edit -> Enter the URL for the Delegated Gateway URL. For security reasons, Salesforce restricts outbound posts to any of the following.
+```
+- 80, which accepts only HTTP connections
+- 443, which accepts only HTTPS connections
+- 1024–66535, which accepts HTTP or HTTPS connections
+```
+4. Enable permissions.
+   1. Enable the `Is Single Sign-On Enabled` permission 
+5. (Optional) Force Callouts to the Delegated Authentication Endpoint
+   1. Setup -> SSO Settings -> click Edit -> select `Force Delegated Authentication Callout`
+
+### [Configure SSO to Salesforce Using Microsoft AD FS as the Identity Provider](https://trailhead.salesforce.com/en/users/strailhead/trailmixes/architect-identity-and-access-management)
+
+Microsoft Active Directory Federation Services (AD FS) functions as the identity provider for SSO authentication. MS ADFS supports SAML protocol.
+
+**Prerequisites**
+- MS Windows Server 2008 R2 Enterprise or Datacenter edition.
+- MS ADFS 2.0
+- SF org
+
+**Overview**
+
+SAML 2.0 defines roles for parties involved in SSO. A user authenticates to the IdP (AD FS 2.0). The user is then able to access a resource at one or more service providers (SP) without logging in to each service provider. The SP (also known as a “relying party”) is in this instance a SF org.
+
+1. The user authenticates to the AD FS server using Integrated Windows Authentication (Kerberos tokens over HTTP) and requests login to SF.
+2. AD FS returns a SAML assertion to the user’s browser.
+3. The browser submits the assertion to SF, which logs the user in.
+
+Common Issues:
+- Federation ID is case-sensitive
+- Assertion has expired. Assertions with a timestamp more than 5 minutes old are rejected.
+- Can’t log in to Salesforce. You can still log in with a username and password. Append ?login to the login URL, for example, https://login.salesforce.com/?login.
