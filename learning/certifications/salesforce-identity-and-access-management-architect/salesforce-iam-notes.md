@@ -396,3 +396,294 @@ Common Issues:
 - Federation ID is case-sensitive
 - Assertion has expired. Assertions with a timestamp more than 5 minutes old are rejected.
 - Can’t log in to Salesforce. You can still log in with a username and password. Append ?login to the login URL, for example, https://login.salesforce.com/?login.
+
+## Salesforce as an Identity Provider
+Exam Weight: 17%
+
+### [OAuth Authorization Flows](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_oauth_flows.htm&type=5)
+
+In general the OAuth flows consist of three main steps:
+1. To initiate an authorization flow, a client app requests access to a protected resource.
+2. In response, an authorizing server grants access tokens to the client app.
+3. A resource server then validates these access tokens and approves access to the protected resource.
+
+SF mobile app OAuth initial flow:
+1. You open the Salesforce mobile app.
+2. An authentication prompt displays, in which you enter your username and password.
+3. The Salesforce mobile app sends your credentials to Salesforce and initiates the OAuth authorization flow.
+4. Salesforce sends the mobile app access and refresh tokens as confirmation of a successful validation of the user and the mobile app.
+5. You approve the request to grant access to the Salesforce mobile app.
+6. The Salesforce mobile app starts.
+
+All OAuth authorization flows, except for the SAML Assertion flow, require you to define a connected app. The default is five authorizations per connected app per user.
+
+**OAuth Authorization Flow Use Cases**
+
+- **OAuth 2.0 Web Server Flow for Web App Integration**
+  - Implements the OAuth 2.0 authorization code grant type. 
+  - The server hosting the web app must be able to protect the connected app’s identity, defined by the client ID and client secret.
+
+Authorization flow:
+1. Request an Authorization Code.
+   1. The external web service—via the connected app—posts an authorization code request using the authorization code grant type to the Salesforce authorization endpoint. 
+
+Example
+``` text
+https://MyDomainName.my.salesforce.com/services/oauth2/authorize?                                 // authorization endpoin
+client_id=3MVG9IHf89I1t8hrvswazsWedXWY0i1qK20PSFaInvUgLFB6vrcb9bbWFTSIHpO8G2jxBLJA6uZGyPFC5Aejq&  // consumer key
+redirect_uri=https://www.mycustomerorderstatus.com/oauth2/callback&                               // user redirected after successful authorization
+response_type=code                                                                                // must be `code` for this type of flow
+```
+2. User Authenticates and Authorizes Access
+   1. If users previously approved access, they don’t have to approve access again.
+3. Salesforce Grants Authorization Code
+   1. Salesforce redirects users to the callback URL
+
+Example
+``` text
+https://www.mycustomerorderstatus.com/oauth2/callback?                                            // callback URL
+code=aPrx4sgoM2Nd1zWeFVlOWveD0HhYmiDiLmlLnXEBgX01tpVOQMWVSUuafFPHu3kCSjzk4CUTZg==                 // authorization code, expires after 15 minutes
+```
+4. Request an Access Token
+   1. The connected app passes the authorization code to the Salesforce token endpoint as an HTTP POST.
+
+Example
+``` text
+POST /services/oauth2/token HTTP/1.1                                                              // SF OAuth 2.o endpoint
+Host: mycompany.my.salesforce.com                                                                 // URL of hosting service
+Content-length: 307                                                                               // Request content's length
+Content-type: application/x-www-form-urlencoded                                                   // Requested format of the returned response, can also be xml and json
+grant_type=authorization_code&                                                                    // must be `authorization_code` for this type of flow
+code=aPrxhgZ2MIpkSy0aOdn07LjKFvsFOis6RGcWXz7p8JQCjcqfed5NQLe7sxWwMY_JQFuLwHRaRA==&                // temporary authorization code from auth server
+client_id=3MVG9IHf89I1t8hrvswazsWedXWY0iqK20PSFaInvUgLFB6vrcb9bbWFTSIHpO8G2jxBLJA6uZGyPFC5Aejq&   // consumer key of the connected app
+client_secret=*******************&                                                                // consumer secret of the connected app
+redirect_uri=https://www.mycustomerorderstatus.com/oauth2/callback                                // user redirected after successful authentication
+```
+   2. Instead of sending client credentials as parameters in the body of the POST, Salesforce supports the HTTP Basic authentication scheme. This scheme's format requires the client_id and client_secret in the authorization header 
+5. Salesforce Grants an Access Token
+
+Example
+``` json
+{
+"access_token": "00DB0000000TfcR!AQQAQFhoK8vTMg_rKA.esrJ2bCs.OOIjJgl.9Cx6O7KqjZmHMLOyVb.U61BU9tm4xRusf7d3fD1P9oefzqS6i9sJMPWj48IK",
+"signature": "d/SxeYBxH0GSVko0HMgcUxuZy0PA2cDDz1u7g7JtDHw=",
+"scope": "web openid",
+"id_token": "eyJraWQiOiIyMjAiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdF9oYXNoIjoiSVBRNkJOTjlvUnUyazdaYnYwbkZrUSIsInN1YiI6Imh0dHBzOi8vbG9...",
+"instance_url": "https://mycompany.my.salesforce.com",
+"id": "https://login.salesforce.com/id/00DB0000000TfcRMAS/005B0000005Bk90IAC",
+"token_type": "Bearer",
+"issued_at": "1558553873237"
+}
+```
+
+- **OAuth 2.0 User-Agent Flow for Desktop or Mobile App Integration**
+  - Users authorize a desktop or mobile app to access data using an external or embedded browser.
+  - Client apps running in a browser using a scripting language such as JavaScript can also use this flow. 
+  - This flow uses the OAuth 2.0 implicit grant type.
+  - The connected app receives the access token as an HTTP redirection.
+
+OAuth 2.0 user-agent flow:
+1. Redirection to Authorization Endpoint
+   1. the connected app redirects the user to the authorization endpoint.
+
+Example
+``` text
+https://login.salesforce.com/services/oauth2/authorize?response_type=token&
+client_id=3MVG9lKcPoNINVBIPJjdw1J9LLJbP_pqwoJYyuisjQhr_LLurNDv7AgQvDTZwCoZuDZrXcPCmBv4o.8ds.5iE&
+redirect_uri=https://www.customercontactinfo.com/user_callback.jspk&
+state=mystate                                                                                       // This value must be URL encoded
+```
+2. User Authenticates and Authorizes Access
+3. Salesforce Grants Access Token
+
+- **OAuth 2.0 Refresh Token Flow for Renewed Sessions**
+  - renews access tokens issued by the OAuth 2.0 web server flow or the OAuth 2.0 user-agent flow
+
+Steps:
+1. The connected app uses the existing refresh token to request a new access token.
+2. After verifying the request, Salesforce grants a new access token to the client.
+
+- **OAuth 2.0 Authorization and Session Management for Hybrid Apps**
+  - A hybrid app sets requested domain cookies and bridges an access token into a web session. 
+  - The access token and web session aren’t connected in these flows. 
+  - You must track when the access and refresh tokens expire and when the web session expires, and then manually rebridge the session to avoid interrupted service. 
+  - To avoid this complex process, use the OAuth 2.0 hybrid app flows that connect the access and refresh tokens with the web session to give hybrid apps direct web session management.
+
+- **OAuth 2.0 JWT Bearer Flow for Server-to-Server Integration**
+  - Authorize servers to access data without interactively logging in each time
+  - Uses a certificate to sign the JWT request
+  - Requires prior approval of the client app
+
+Authorization flow:
+1. Create a JWT
+   1. Upload an X509 Certificate to a Java Key Store (JKS).
+   2. Register the X509 Certificate for the connected app. When the connected app is saved, the client_id and client_secret are generated and assigned to the app.
+   3. Build an app that generates a JWT, which is signed with the X509 Certificate’s private key. 
+2. Request Access Token
+   1. The connected app posts a token request to the Salesforce instance’s token endpoint. It includes the JWT in the post.
+3. Salesforce Grants Access Token
+4. Access Protected Data
+
+- **OpenID Connect Dynamic Client Registration for External API Gateways**
+  - To enable your Salesforce instance as an independent OAuth authorization server to protect resources hosted on an external API gateway.
+  - To directly register client apps as connected apps with Salesforce. 
+
+Steps:
+1. Create a connected app for API gateway
+2. Configure the APOI gateway
+3. API gateway registers a connected app
+4. SF responds with the registered connected app metadata
+5. API gateway sends a request to the SF authorization endpoint to approve the registered connected app. SF generates an access token for the connected app.
+6. API gateway send a request to SF introspectioon endpoint to validate the access token
+7. API gateway allows the registered connected app to access the protected data
+
+- **Generate an Initial Access Token**
+  - Before generating an initial access token, create a connected app to integrate the OAuth 2.0 client with the Salesforce API. 
+  - The registering connected app must provide the initial access token in its request to the dynamic client registration endpoint
+
+- **OpenID Connect Token Introspection**
+  - Allows all OAuth connected apps to check the current state of an OAuth 2.0 access or refresh token.
+  - As part of this flow, the authorization server validates, or introspects, the client app’s access token.
+  - The format of the token introspection endpoint URL is `https://hostname/services/oauth2/introspect`.
+
+- **OAuth 2.0 Device Flow for IoT Integration**
+  - To integrate apps that run on devices with limited input or display capabilities,
+  - Command-line apps can also use this flow.
+
+Authorization flow:
+1. Device Requests Authorization
+   1. `esponse_type=device_code`
+2. Salesforce Returns Verification Codes
+   1. Salesforce returns a human-readable user code, verification URL, and device code.
+3. User Authenticates and Authorizes While Device Polls the Token Endpoint
+   1. The user opens a browser, navigates to the verification URL, and enters the code displayed on the device.
+4. Salesforce Grants Access Token
+
+- **OAuth 2.0 Asset Token Flow for Securing Connected Devices**
+  - Asset tokens are an open-standards-based JWT authentication token for verifying and securing requests from connected devices. 
+
+- **OAuth 2.0 Username-Password Flow for Special Scenarios**
+  - Recommend avoiding this flow because it passes credentials back and forth.
+  - Use it only if there’s a high degree of trust between the resource owner and the client
+  - Set user permissions to minimize access and protect stored credentials from unauthorized access.
+
+Flow:
+1. The connected app requests an access token by sending the user’s login credentials to the Salesforce token endpoint.
+2. After verifying the request, Salesforce grants an access token to the connected app.
+3. The connected app can use the access token to access the protected data on the user’s behalf.
+
+- **SAML Assertion Flow for Accessing the API**
+  - An alternative for orgs that use SAML to access Salesforce and want to access the API the same way. 
+  - Can use this assertion flow without a connected app.
+
+### [OAuth With Salesforce Demystified](https://www.youtube.com/watch?v=zpToAGuhg60&t=540s&ab_channel=SalesforceDevelopers)
+Yuotube clip ~ 40 min
+
+### [Authorize Apps with OAuth](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_authenticate.htm&type=5)
+
+In Salesforce, you can use OAuth authorization to approve a client application’s access to your org’s protected resources.
+You can’t use OAuth independently to authenticate a user’s identity. Instead, use OpenID Connect as an authentication service in addition to OAuth authorization.
+
+**OAuth Tokens and Scopes**
+OAuth tokens authorize access to protected resources. Scopes further define the type of protected resources that the connected app can access.
+
+Authorizing server can provide these **OAuth tokens** to the client, dependending on a flow:
+- **Authorization code** is passed to client after successful authentication. The client sends the authorization code to the authorization server to obtain an access token and, optionally, a refresh token.
+- **Access token** is sent to client after it's authorized. Client sends it to the resource server to request access to protected data. The client must be able to protect the token by using TSL or SSL. It required the *web* scope assigned to the connected app.
+- **Refresh token** can have an indefinite lifetime depends on configuration or when explicitely revoked. A client can repeatedly use the token to get access to the resource server.
+- **ID token** is a signed data structure that contains authenticated user attributes, including a unique identifier for the user and when the token was issued.
+- **Initial access token**. After configuring an OAuth 2.0 connected app, generate an initial access token, which is required to authorize the dynamic client registration request flow.
+- **Asset token** is to linking of devices to Service Cloud Asset data.
+
+**OAuth Scopes**:
+- Perform ANSI SQL queries on Salesforce CDP data (cdp_query_api)
+- Manage Pardot services (pardot_api). Manage the full extent of accessible services in Pardot.
+- Manage Salesforce CDP profile data (cdp_profile_api). Manage profile records.
+- Access Connect REST API resources (chatter_api)
+- Manage Salesforce CDP Ingestion API data (cdp_ingest_api). Upload and maintain external data sets in the Salesforce CDP platform.
+- Access Analytics REST API Charts Geodata resources (eclair_api)
+- Access Analytics REST API resources (wave_api)
+- Manage user data via APIs (api). This scope also includes chatter_api.
+- Access custom permissions (custom_permissions). This scope also shows whether the current user has each permission enabled.
+- Access the identity URL service (id, profile, email, address, phone)
+- Access Lightning applications (lightning). Allows hybrid apps to directly obtain Lightning child sessions.
+- Access content resources (content)
+- Access unique user identifiers (openid). In the OAuth 2.0 user-agent flow and the OAuth 2.0 web server flow, use the openid scope. In addition to the access token, this scope enables you to receive a signed ID token that conforms to the OpenID Connect specifications.
+- Full access (full). Access to all data accessible by the logged-in user, and encompasses all other scopes.
+- Perform requests at any time (refresh_token, offline_access). Allows a refresh token to be returned when the requesting client is eligible to receive one. With a refresh token, the app can interact with the user’s data while the user is offline. 
+- Access Visualforce applications (visualforce)
+- Manage user data via Web browsers (web). Allows use of the access_token on the web. This scope also includes visualforce, allowing access to customer-created Visualforce pages.
+- Access chatbot services (chatbot_api). Einstein Bot API services.
+
+**Identity URLs**
+The identity URL is the gateway to the Salesforce Identity Service that can be accessed using the OAuth 2.0 user-agent or web server flows. The connected app can then send a GET request with the access token to the identity URL. In response, Salesforce returns details about the queried user and org.
+
+**OAuth Endpoints** are the URLs that you use to make OAuth authorization requests to Salesforce. Each OAuth flow defines which endpoints to use and what request data to provide.
+
+### [Connected App and OAuth Terminology](https://help.salesforce.com/s/articleView?id=sf.remoteaccess_terminology.htm&type=5)
+- Access Token - use instead of SF credentials
+- Authorization Code. Only used in OAuth 2.0 with the web server flow, the authorization code is a token that represents the access granted by the end user.
+- Callback URL - URL that is invoked after OAuth authorization for the consumer (connected app). May be not used.
+- Consumer Key - to identify consumer to Salesforce.
+- Consumer Secret - to establish ownership of the consumer key. 
+- Nonce - random number, used during authorization to ensure that requests cannot be reused.
+- Token Secret - to establish ownership of a given token, both for request tokens and access tokens.
+
+### [Connected App Basics] (https://trailhead.salesforce.com/content/learn/modules/connected-app-basics)
+
+See [Build Integrations Using Connected Apps at salesforce-integration-architect-notes.md](../salesforce-integration-architect/salesforce-integration-architect-notes.md) notes.
+
+### [Build a Connected App for API Integration](https://trailhead.salesforce.com/content/learn/projects/build-a-connected-app-for-api-integration)
+
+Hands-on project.
+
+### [Configuring SAML SSO for a Canvas App](https://developer.salesforce.com/docs/atlas.en-us.sso.meta/sso/sso_examples_canvas.htm?_ga=2.77087517.944693519.1655603644-742205375.1652543223)
+*The link leads to the general SSO article*
+[The more appropriate link to SAML SSO for a Canvas app](https://developer.salesforce.com/docs/atlas.en-us.238.0.platform_connect.meta/platform_connect/canvas_app_saml_sso_intro.htm)
+
+SAML SSO enables you to give your users automatic authentication into your canvas app via SAML and authentication into Salesforce via the signed request. You can create a canvas app that begins a standard SAML authentication flow when opened by a user. After this process completes, the user is authenticated into your Web application.
+
+For canvas apps that use **signed request authentication**, two methods that are included in the Canvas SDK enable your canvas app to call into Salesforce to receive a new signed request directly or enable Salesforce to repost the signed request to your Web application endpoint. This results in a complete end-to-end authentication flow.
+- `refreshSignedRequest` Method
+  - Returns a new signed request via a callback. After the SAML SSO process is completed, your app can call this method and receive a new signed request.
+  - For developers who need to retrieve the signed request by using a more client-side JavaScript approach.
+- `repost` Method
+  - Requests the parent window to initiate a POST to your canvas app and reloads the app page with a refreshed signed request. After the SAML SSO process is completed, your app can call this method and a new signed request is sent to your app via a POST.
+  - For developers who want to retrieve the signed request using a more server-side approach. 
+
+## Access Management Best Practices
+Exam Weight: 15%
+
+### [Security Basics](https://trailhead.salesforce.com/content/learn/modules/security_basics)
+
+Basic Attack Methods:
+- Phishing - Attempting to acquire sensitive information by masquerading as a trustworthy entity. 
+- Malware - downloading malicious software (malware)
+- Social Engineering - Manipulating people into taking action or revealing confidential information.
+- Tailgating
+- Eavesdropping
+- Dumpster Diving
+- Installing Rogue Devices
+
+**Health Check** is set up to automatically measure your org's security against the Salesforce baseline (called Stand Values in the tool), but you can also import your own baseline for a more customized view of security. These are called **Custom Baselines** in the tool and you can add them by simply importing an XML file. 
+If you run a Salesforce environment with multiple orgs, you can use the power of Health Check across all of your orgs with Salesforce's **Security Center** (add-on)
+
+### [Journey to MFA: Launch Multi-Factor Authentication](https://salesforce.vidyard.com/watch/O3rQLAtVX0Z4lLjdOvVFYQ?_ga=2.12528828.944693519.1655603644-742205375.1652543223)
+Vidyard video clip ~ 5min
+
+### [Lightning Login Overview (Lightning Experience)](https://salesforce.vidyard.com/watch/Pk8QwpPk9QguuzZPtVh5dR?_ga=2.8283066.944693519.1655603644-742205375.1652543223)
+Vidyard video clip ~ 2min
+
+### [Multi-Factor Authentication](https://help.salesforce.com/s/articleView?id=sf.security_overview_2fa.htm&type=5)
+
+If you haven’t satisfied the MFA requirement, be aware that in the future Salesforce is automatically enabling and enforcing MFA for all direct UI logins.
+
+Use the **Waive Multi-Factor Authentication** for Exempt Users user permission before MFA is enabled for your org.
+
+Enable MFA:
+- For an entire org: Setup -> Identity Verification -> select Require multi-factor authentication (MFA) for all direct UI logins to your Salesforce org
+- The setting above can be set per pofiles and permission sets and assigned to specific users
+
+You can use the MFA functionality provided by Salesforce rather than your SSO identity provider’s MFA service -> require a High Assurance session security level on user profiles and configure the session security level for your SSO login method to produce a Standard session.
+
+For connected apps, only the OAuth 2.0 refresh token flow, web server flow, and user-agent flows support using API logins with the high assurance MFA session security level. All other OAuth flows, such as the JSON Web Token (JWT) bearer token flow, block API logins with the high assurance MFA session security level
