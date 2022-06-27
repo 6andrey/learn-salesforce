@@ -687,3 +687,171 @@ Enable MFA:
 You can use the MFA functionality provided by Salesforce rather than your SSO identity provider’s MFA service -> require a High Assurance session security level on user profiles and configure the session security level for your SSO login method to produce a Standard session.
 
 For connected apps, only the OAuth 2.0 refresh token flow, web server flow, and user-agent flows support using API logins with the high assurance MFA session security level. All other OAuth flows, such as the JSON Web Token (JWT) bearer token flow, block API logins with the high assurance MFA session security level
+
+### [Session Security](https://help.salesforce.com/s/articleView?id=sf.security_overview_sessions.htm&type=5)
+
+Session Security Settings:
+- Timout Settings. The last active session time value isn’t updated until halfway through the timeout period. 
+- Lock sessions to the IP address from which they originated - helps to prevent unauthorized persons from hijacking a valid session.
+- Lock sessions to the domain in which they were first used to associate - a current UI session for a user, such as an Experience Site user, with a specific domain. This setting helps prevent unauthorized use of the session ID in another domain.
+- Allow employees to log in directly to an Experience Cloud site
+- Force relogin after Login-As-User
+- Require HttpOnly attribute to restrict session ID cookie access. A cookie with the HttpOnly attribute isn’t accessible through non-HTTP methods, such as calls from JavaScript.
+- Use POST requests for cross-domain sessions. POST requests are more secure because they keep the session information in the body of the request.
+- Enforce login IP ranges on every request 
+- Enable caching and autocomplete on login page
+- Enable secure and persistent browser caching to improve performance - to enable secure data caching in the browser. 
+- Enable Content Delivery Network (CDN) for Lightning Component framework - to load Lightning Experience and other apps faster by enabling Akamai’s content delivery network (CDN) to serve the static content for Lightning Component framework.
+- Enable clickjack protection for customer Visualforce pages with standard headers
+- Enable clickjack protection for customer Visualforce pages with headers disabled 
+- Override Restriction on Accessing Email Templates in Salesforce Classic Using Internet Explorer 
+- Enable Stricter Content Security Policy - to prohibit the use of the unsafe-inline source for the script-src directive.
+- Enable XSS protection - to protect against cross-site scripting attacks.
+- Enable Content Sniffing protection - to prevent the browser from inferring the MIME type from the document content.
+- Hide this site's URL from other web sites (including Visualforce pages) 
+- Warn users before they are redirected outside of Salesforce
+
+You also can set policies requiring High Assurance on reports, dashboards, and connected apps. And you can specify an action to take when the session that’s used to access the resource isn’t High Assurance. These actions are supported:
+- Block—Prevents access to the resource by showing an insufficient privileges error.
+- Raise session level—Prompts users to complete MFA.
+
+Enable Browser Security Settings. Browser security settings protect sensitive information and monitor SSL certificates.
+- Referrer URL Protection. When loading assets outside of Salesforce or navigating outside of Salesforce, the referrer header shows only Salesforce.com or Force.com rather than the entire URL. Only Chrome and Firefox.
+- Public Key Pinning. To detect man-in-the-middle attacks, Salesforce now monitors which SSL certificates users can see. Only Chrome and Firefox.
+- HSTS (HTTP Strict Transport Security) Protection - redirects browsers to use HTTPS.
+
+Set Trusted IP Ranges for Your Organization
+- Trusted IP Ranges define a list of IP addresses from which users can log in without receiving a login challenge for verification of their identity, such as a code sent to their mobile phone.
+
+Manage CSP Trusted Sites
+ - The Lightning Component framework uses Content Security Policy (CSP) to impose restrictions on content. The main objective of CSP is to help prevent cross-site scripting (XSS) and other code injection attacks. To use third-party APIs that make requests to an external (non-Salesforce) server or to use a WebSocket connection, add the server as a CSP Trusted Site.
+
+Configure Salesforce CORS Allowlist
+- Cross-Origin Resource Sharing (CORS) allows web browsers to request resources from other origins.
+
+## Salesforce Identity
+Exam Weight: 12%
+
+### [Standard User Licenses](https://help.salesforce.com/articleView?id=users_license_types_available.htm&type=5&_ga=2.45746020.116518255.1655855453-742205375.1652543223)
+
+|License Type|Description|Available In|
+|---|---|---|
+|Salesforce|Full access to CRM and AppExchange apps|All editions|
+|Knowledge Only User|Access to custom objects, tabs and standard tabs, such as: Articles, Article Management, Chatter, Files, Reports|Eterprise, Unlimited, and Performance|
+|Identity Only|E.g. SSO|Eterprise, Unlimited, and Performance, Developer|
+|External Identity|Access to SF Customer Identity for cusrtomers and partners to self-register|Eterprise, Unlimited, and Performance, Developer|
+|WDC Only User|Access to WDC|Enterprise, Unlimited, and Performance, Developer|
+|Salesforce Platform|Access to custom apps but not to standard SF functionality. + Accounts, Contacts, Reports, Dashboards, ...|Enterprise, Unlimited, and Performance, Developer|
+|Lightning Platform - One App|Access to 1 custom app (up to 10 custon objects)|Enterprise and Unlimited|
+|Force.com - App Subscription|access to a Lightning Platform Light App or Lightning Platform Enterprise App. CRM functionality isn’t included.|Enterprise, Unlimited, and Performance|
+|Company Community User|access custom tabs, Salesforce Files, Chatter (people, groups, feeds), and an Experience Cloud site|Enterprise, Unlimited, Performance, and Developer|
+|Developer|access to development tools and environments. It comes with one Developer sandbox, one scratch org, and access to the Dev Hub|Enterprise, Unlimited, and Performance|
+
+Internal vs. External License
+- Internal user login using login.salesforce.com or ...my.salesforce.com - using internal licesne. Users can also access Experience CLoud.
+- External user with external license can only access Experience Cloud that they are member of.
+
+Internal licenses provide broader access to your company data and information. The incorrect use of an internal license for an external use case can provide external users unwanted or inappropriate access to your data and records.
+
+Salesforce **Customer Identity** is available when you purchase the External Identity license.
+- customers and partners can self-register, log in, update their profile, and securely access web and mobile apps with a single identity. 
+- With an External Identity license, you can access several standard objects and 10 custom objects 
+
+### [Identity Connect Basics](https://trailhead.salesforce.com/content/learn/modules/identity_connect/identity_connect_intro)
+
+**Identity Connect** is a Salesforce Identity product that helps Salesforce admins apply all the data collected in AD to automate Salesforce user management. It syncs changes in AD within seconds. Identity Connect constantly monitors AD and updates Salesforce when changes in AD occur. Syncing can occur in near real time, on a regular schedule, or both. Data transfer is in one direction and AD is the source of truth. Identity Connect only needs read-only access to the users and groups in AD that you want to sync with Salesforce.
+Identity Connect is an add-on license available for Salesforce users on most Salesforce products: Salesforce platform, Sales Cloud, Service Cloud, Analytics Cloud, and Identity for Employees.
+
+Data Mapping between Identity Connect and AD:
+- Locate where to look in AD for SF users
+  - Set Base Context - start searching users "at this point" - specify the branch under which AD users, groups belong
+  - Use User and Group filter to define scope
+- Attributes to pull from AD (remove those you want to manage in SF)
+  - Map, remove mapping, or add custom attributes from SF
+  - Use default values when AD value is empty
+  - Use Transform Script to adjust AD values for SF
+- Define rules for assigning permissions 
+  - Profile Mapping - associate profile to 1+ AD groups
+  - Role Mapping - map Roles to 1+ AD groups
+  - Permission Sets - map PSs to 1+ AD groups
+  - Groups - map Groups to 1+ AD groups
+
+You can also map existing SF users to AD users.
+
+Identity Connect is on-premises software that sits behind your firewall and pushes data to Salesforce. Instead of installing Identity Connect behind the firewall, you can install it in the DMZ.
+
+When using Identity Connect for SSO, put Identity Connect in the DMZ if:
+- Your users log in to Salesforce from outside your trusted network. This way, your external users can access the Identity Connect login page without having to use a VPN.
+- You want users to log in to Salesforce from a mobile device. Otherwise, your users must be on a mobile VPN.
+
+Identity Connect is designed to work with multiple Salesforce orgs.
+Identity Connect is designed to work with a single AD domain. But you can still use Identity Connect with multiple domains.
+- One Identity Connect to Serve All AD Domains
+  - Use a global catalog-  a special domain controller that aggregates all user and group information from all AD domains into a central repository.
+- Individual Identity Connect Environments for Each AD Domain.
+
+**A high-availability cluster** - Deploy an Identity Connect cluster of multiple servers to ensure Identity Connect works even when one server goes down. 
+
+You can’t mix production and sandbox orgs in one Identity Connect environment.
+
+Integrated Windows Authentication (IWA) offers another way to provide SSO. It’s based on Kerberos authentication.
+
+### [Deploying Single Sign-on and Provisioning for Active Directory](https://www.youtube.com/watch?v=kNRHsHcphg0&t=491s)
+Youtube clip ~ 48 min
+
+## Community (Partner and Customer)
+Exam Weight: 18%
+
+### [Identity for Customers](https://trailhead.salesforce.com/content/learn/modules/identity_external)
+
+You set up and manage Salesforce Identity for customers through Experience Cloud sites. 
+You can modify the Login & Registration page to determine the look and behavior of your customers’ login experience.
+- Spaces -> Administration -> Login & Registration -> chnage Logo, Background, Login Button, Right Frame URL
+
+Set Up Self-Registration
+- All Sites - Workspaces -> Administration -> Login & Registration -> select `Allow customers and partners to self-register`, select Profile and Account new users will be associated with.
+
+You can use Social Sign-On for users to use their social accoiunts
+Add social network (e.g. Facebook) as a login option:
+- Workspaces -> Administration -> Login & Registration -> check login option of the auth. provider previsouslyu configured in SF.
+
+### [Identity for Mobile-Centric Customers](https://trailhead.salesforce.com/content/learn/modules/identity-for-mobile-centric-customers)
+
+Salesforce **Mobile-First Identity** simplifies the login experience for your customers-  all aspects of identity verification and authentication: from sign-up, to log in, to handling identity verification, to resetting passwords, to logging out.
+
+Passwordless Login
+1. Salesforce prompts users for their email address or phone number on your site’s login page.
+2. Users enter their email address or phone number on the login page.
+3. Salesforce sends users a unique verification code to the specified Inbox or phone number.
+4. Users enter the verification code on the Salesforce Verify page.
+5. Salesforce validates that the code is correct, and that the email or phone number exists and belongs to your org.
+6. Users are logged in.
+
+### [Connecting To Your Customers Across Every Channel With Salesforce Identity](https://www.salesforce.com/video/1778176/?_ga=2.141947057.263837341.1656185973-742205375.1652543223)
+Vidyard clip ~ 40 min
+
+## Additional Resources
+
+### [Salesforce Data Mask](https://trailhead.salesforce.com/content/learn/modules/salesforce-data-mask)
+
+**Data Mask** uses platform-native obfuscation technology to mask sensitive data in any full or partial sandboxes. You can configure different levels of masking, depending on the sensitivity of the data.
+Data can be:
+- Replaced with random values - `Replace with Random Characters or Numbers`
+- Replaced with familiar values - `Replace from Library`
+- Deleted
+
+### [Secure Secrets Storage](https://trailhead.salesforce.com/content/learn/modules/secure-secrets-storage)
+
+See [**Secure Secrets Storage** at salesforce-integration-archtect-notes.md](../salesforce-integration-architect/salesforce-integration-architect-notes.md#secure-secrets-storagehttpstrailheadsalesforcecomcontentlearnmodulessecure-secrets-storagetrailmixcreatoridstrailheadtrailmixslugarchitect-integration-architecture)
+
+### [Secure Salesforce Configuration](https://trailhead.salesforce.com/content/learn/modules/secure-salesforce-configuration)
+
+**Health Check** is a dashboard that lets you see how closely the security settings in your org align to the settings recommended by Salesforce. Health Check can expose inactive security mechanisms that exist in your org’s security settings.
+
+**Salesforce Shield** is a set of security tools that admins and developers can use to protect business-critical apps with capabilities like enhanced encryption and event monitoring.
+- Platform Encryption - to natively encrypt your most sensitive data at rest across all of your SF apps.
+- Event Monitoring - to access to detailed performance, security, and usage data on all of your SF apps.
+- Field Audit Trail - to define a policy to retain archived field history data for up to 10 years from the time the data was archived.
+
+### [Security Awareness and Training](https://trailhead.salesforce.com/content/learn/modules/security-awareness-and-training)
+

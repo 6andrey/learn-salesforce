@@ -403,7 +403,7 @@ A `certificate chain` is a hierarchical order of certificates where one certific
 Before any Visualforce page, Apex callout, or JavaScript code using XmlHttpRequest in an s-control or custom button can call an external site, that site must be registered in the Remote Site Settings page, or the call fails.  
 `Setup -> Remote Site Settings -> New Remote Site`  
 
-### [Build Integrations Using Connected Apps](https://trailhead.salesforce.com/en/content/learn/trails/build-integrations-using-connected-apps?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+### [Build Integrations Using Connected Apps](https://trailhead.salesforce.com/en/content/learn/trails/build-integrations-using-connected-apps)  
   
 A **connected app** is a framework that enables an external application to integrate with Salesforce using APIs and standard protocols (SAML, OAuth, OpenID Connect) used to authorize, authenticate, and provide single sign-on (SSO) for external apps.  
   
@@ -491,7 +491,7 @@ A connected app, that implements OpenID Connect, can be used to intergrate a ser
 Dynamic client registration enables resource servers to dynamically create client apps as connected apps.  
 Token introspection allows all OAuth connected apps to check the current state of an OAuth 2.0 access or refresh token.  
   
-### [**Secure Secrets Storage**](https://trailhead.salesforce.com/content/learn/modules/secure-secrets-storage?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
+### [Secure Secrets Storage](https://trailhead.salesforce.com/content/learn/modules/secure-secrets-storage?trailmix_creator_id=strailhead&trailmix_slug=architect-integration-architecture)  
   
 **Secrets** are data that can be used to verify what privileges a user has in a given situation. E.g. Passwords and passphrases, Encryption keys, OAuth tokens, Payment information, such as credit card numbers and PINs used to authenticate a payment transaction, Social Security numbers, which can be used to verify individual identity.  
   
