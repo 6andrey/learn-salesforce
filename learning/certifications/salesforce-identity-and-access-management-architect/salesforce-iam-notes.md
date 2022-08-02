@@ -855,3 +855,37 @@ See [**Secure Secrets Storage** at salesforce-integration-archtect-notes.md](../
 
 ### [Security Awareness and Training](https://trailhead.salesforce.com/content/learn/modules/security-awareness-and-training)
 
+### [Monitor Login Activity with Login Forensics](https://help.salesforce.com/s/articleView?id=sf.event_monitoring_faq.htm&type=5)
+
+**Login forensics** helps administrators better determine which user behavior is legitimate to prevent identity fraud in Salesforce.
+- Available in: Enterprise, Unlimited, and Developer Editions
+- Requires Salesforce Shield or Salesforce Event Monitoring add-on subscriptions.
+
+**Login forensics** provides key user access data, including:
+- The average # of logins per user per specified time period
+- Who logged more than average # of times
+- Who logged during non-business hours
+- Who logged in using suspicious IP ranges
+
+This feature is API only. Login events are reained for 10 years by default. Login data can be delayed when querying (due ti async query).
+To enable got to Setup -> Event Manager -> click on Login Event dropdown and select Enable Storing.
+
+### [Difference between SAML and OpenID Connect](https://blog.salesforcecasts.com/difference-between-saml-and-openid-connect/)
+Blog post by Teja
+
+`OpenID Connect is about the user authentication unlike, SAML which deals with sending and receiving XML responses between IP and SP about the user.`
+
+### [User Provisioning for Connected Apps](https://help.salesforce.com/s/articleView?id=sf.connected_app_user_provisioning.htm&type=5)
+
+User provisioning scenario (example): 
+- You configure user provisioning for a G Suite connected app in your org. 
+- Then you assign the Employees profile to that connected app. 
+- When you create a user in your org and assign the user to the Employees profile, the user is provisioned in G Suite. 
+- When the user is deactivated, or the profile assignment changes, the user is deprovisioned from G Suite.
+
+Salesforce provides a step-by-step wizard to guide you through the user provisioning process for each connected app.
+Prerequisites for the wizard:
+- A connected app for the third-party service to provision
+- Named credentials (to identify the third-party system and its authentication settings)
+- A flow to manage provisioning requests to the third-party service or app. From AppExchange, install the Salesforce Identity User Provisioning Connectors package and the Salesforce Identity User Provisioning Utils packages.
+
