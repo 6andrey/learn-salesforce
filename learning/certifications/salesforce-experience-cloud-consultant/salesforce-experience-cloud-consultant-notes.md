@@ -29,6 +29,18 @@
     - [Lightning Bolt for Salesforce: Build Once, Then Distribute and Reuse](#lightning-bolt-for-salesforce-build-once-then-distribute-and-reuse)
   - [User Creation and Authentication](#user-creation-and-authentication)
     - [Create Experience Cloud Site Users](#create-experience-cloud-site-users)
+    - [Add Members to Your Experience Cloud Site](#add-members-to-your-experience-cloud-site)
+      - [Set Custom Site Roles](#set-custom-site-roles)
+    - [Delegate Management to External Users](#delegate-management-to-external-users)
+      - [Delegated Account Management](#delegated-account-management)
+      - [Allow External Users to Manage Other Accounts with Account Switcher](#allow-external-users-to-manage-other-accounts-with-account-switcher)
+    - [Securely Share Your Experience Cloud Sites with Guest Users](#securely-share-your-experience-cloud-sites-with-guest-users)
+      - [Give Secure Access to Unauthenticated Users with the Guest User Profile](#give-secure-access-to-unauthenticated-users-with-the-guest-user-profile)
+      - [SEO Best Practices and Considerations for Guest Users](#seo-best-practices-and-considerations-for-guest-users)
+      - [Control Public Access to Your Experience Builder Sites](#control-public-access-to-your-experience-builder-sites)
+      - [Object-Specific Security Best Practices for Guest Users](#object-specific-security-best-practices-for-guest-users)
+  - [Identity for Mobile-Centric Customers](#identity-for-mobile-centric-customers)
+  - [Adoption and Analytics](#adoption-and-analytics)
 
 ## Experience Cloud Basics
 Exam Weight 8%
@@ -377,4 +389,101 @@ Exam Weight 13%
 |To create/edit Cuatomer Community Plus or Partner Community users|Manage External Users|
 |To creare/edit only Customer Community Plus users|Manage Customer Users|
 |To log in as community user|(Manage External Users or Manage Customer Users) and Edit on Accounts|
+
+### [Add Members to Your Experience Cloud Site](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.149217078.1494336318.1659882292-742205375.1652543223&type=5&id=sf.networks_customize_members.htm)
+
+Use profiles and permission sets to manage site membership during the setup process. Adding a profile or permission to a site’s membership gives access to the site to users with that profile or assigned the permission set. Permission Set Groups can't be used.
+
+Other options for granting access to your site:
+
+- Enable self-registration so that external users can register on their own
+- Enable authentication providers, such as Facebook, so that external users can log into the site without creating an account
+
+#### Set Custom Site Roles
+
+Experience Cloud site members are typically assigned the role of partner, customer, or employee. However, you can create custom roles for users that replace standard ones. You can also choose to display the member’s company name in place of a role.
+
+To create custom roles Experience Cloud sites:
+
+1. Setup -> Digital Experiences -> All Sites -> Workspaces
+2. Administration -> Members
+3. Site Role -> Custom 
+4. Enter new name to use instead of the role name
+5. Save
+
+### [Delegate Management to External Users](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.50189478.1494336318.1659882292-742205375.1652543223&type=5&id=sf.networks_del_external_user_manager_intro.htm)
+
+If your partner organizations have many users, you can delegate user administration to external users, who can:
+
+* Create and edit external user records
+* Generate new passwords for external users
+* Disable Existing excternal users
+* Manage permission sets for external users in their account
+
+#### Delegated Account Management
+
+Give external users the power to manage account members and account brand information. Delegated account managers can create and edit a member, reset a member’s password, and activate or deactivate a member. They can also upload brand logos and save company information for co-branded email templates to partner users, marketing campaigns, deal notifications, and websites.
+
+External users who have been granted delegated external user administration rights can access Account Management.
+
+#### Allow External Users to Manage Other Accounts with Account Switcher
+
+And authorize access to manage the other accounts’ users - add `Manage Users` access.
+With `Authorized Access`, the managing user of an external managed account can manage permission sets for other users, reset passwords, activate, deactivate, or add members to the target account.
+
+### [Securely Share Your Experience Cloud Sites with Guest Users](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.252624009.1494336318.1659882292-742205375.1652543223&type=5&id=sf.networks_secure_community.htm)
+
+When this policy is fully enforced, any public-facing site must follow these rules.
+
+* Securing access to records by guest users: guest user external OWD always set to private, guests must only have read access, can't be members of public groups or queues, can't access to records vis manual sharing, can only get access to recors via `guest user sharing rules`
+* Assigning new records created by geuest to a default owner in your org
+* Viewing other members of a publicly available site - guests can't be assigned ti `View All Users` permission; your org can access member visibility on a site-by-site basis
+
+#### Give Secure Access to Unauthenticated Users with the Guest User Profile
+
+Use a guest user profile to control public access to data, content, and objects in your site that don't require authentication. For example, you can create a customer support community where existing and potential customers can view public discussions, known issues, and solutions posted by other members or support without logging in. Salesforce creates a profile, a user record, and sharing mechanisms that are available only to guest users, regardless of whether the site is configured for public access. All guest visitors to a public site share the same guest user record (one per site) and have the same access level.
+
+General Best Practices and Considerations when configuring the guest user profile:
+
+- The guest user profile is specific to the paricular Experience Cloud site
+- If a sit is active, guest users can access a subset of its pages, such as login and error pages
+- Review object settings, permissions sets, PSGs, PS lisenses assigned to guest users
+- Review all system permissions
+- etc...
+
+#### SEO Best Practices and Considerations for Guest Users
+
+To configure your site for search engine optimization (SEO), Salesforce uses the guest user profile to identify the public pages and objects available for indexing. A search engine is considered a guest, or unauthenticated, user. For Experience Builder sites, Salesforce automatically generates a sitemap with a list of the publicly accessible content. For sites built with Salesforce Tabs +Visualforce, you are responsible for creating the sitemap and indicating which pages are included.
+
+#### Control Public Access to Your Experience Builder Sites
+
+Best Practices:
+
+* Don’t create object pages for objects that aren’t exposed to external users. If you have object pages that aren’t being used, delete them.
+* Use specific object pages when possible. These pages make public URLs more discoverable to your users.
+* If you set up object pages for authenticated users, test the pages to ensure that guest users can’t see them.
+* Review page access settings for the search page to ensure that you want the search page accessed by guest users.
+* To limit access to the search page, consider creating a search page variation with a guest audience.
+* Guest users only see results on objects they have access to.
+* Actual record access for the guest user isn’t limited to the objects the admin configures in the Global Search Results component. The guest user can have access to other objects based on org sharing configurations.
+* Always check the org’s sharing model (including org-wide defaults and sharing rules) to ensure that the guest user doesn’t have access to your org’s sensitive data.
+
+#### Object-Specific Security Best Practices for Guest Users
+
+* To assign or remove Chatter-specific permissions to guest users, check System Permissions in the guest user profile.
+* Give only internal and trusted members the ability to create groups. Consider a group creation workflow with an approval process.
+* Keep the number of groups to a minimum, and audit your site’s groups on a regular basis.
+* Keep groups private whenever possible.
+* Consider a process on who can manage groups.
+* Make sure that the content in the group detail page meets your site’s content standards.
+* Review files that are publicly accessible and associated to groups to make sure that they meet your site’s content standards.
+* Set up moderation rules for all content created by users.
+
+## [Identity for Mobile-Centric Customers](https://trailhead.salesforce.com/content/learn/modules/identity-for-mobile-centric-customers)
+
+Notes can be found [here](../salesforce-identity-and-access-management-architect/salesforce-iam-notes.md#identity-for-mobile-centric-customers)
+
+## Adoption and Analytics
+
+Exam Weight 5%
 
