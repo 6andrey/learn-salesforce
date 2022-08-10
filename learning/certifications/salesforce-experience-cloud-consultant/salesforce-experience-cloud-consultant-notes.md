@@ -45,6 +45,10 @@
       - [Object-Specific Security Best Practices for Guest Users](#object-specific-security-best-practices-for-guest-users)
   - [Identity for Mobile-Centric Customers](#identity-for-mobile-centric-customers)
   - [Adoption and Analytics](#adoption-and-analytics)
+    - [Reporting for Experience Cloud Sites](#reporting-for-experience-cloud-sites)
+      - [AppEchange Packages](#appechange-packages)
+      - [Set Up Report Management for External Users](#set-up-report-management-for-external-users)
+      - [Google Analytics™ for Salesforce Communities Package](#google-analytics-for-salesforce-communities-package)
 
 ## Experience Cloud Basics
 Exam Weight 8%
@@ -504,4 +508,21 @@ Notes can be found [here](../salesforce-identity-and-access-management-architect
 ## Adoption and Analytics
 
 Exam Weight 5%
+
+### [Reporting for Experience Cloud Sites](https://help.salesforce.com/s/articleView?id=sf.networks_reporting_intro.htm&type=5)
+
+#### AppEchange Packages
+
+The Salesforce Communities Management packages give community managers an essential starter set of dashboards and reports to keep tabs on activity and engagement directly in Experience Workspaces. You’ll also have the option to give your community managers access to the package contents so you don’t have to share the dashboard and report folders with them later. When you view the dashboards in Experience Workspaces, site-specific data is displayed.
+
+Use **Insight** ~reports~ to view, monitor, and act on your community’s activity. These reports give you a super-focused look at a specific area while helping you with day-to-day community management. Insights can help you prioritize your work and give you instant access to what matters most.
+Use **Dashboards** to view your community’s analytics, such as metrics and trends on activity. Dashboards give you mid-term to long-term views on adoption and engagement in your community. They help you monitor return on investment (ROI) and key performance indicators (KPI).
+
+#### Set Up Report Management for External Users
+
+Partner and customer users can create, delete, and edit reports in their own personal folder or, with sufficient permission, in a privately shared folder. You can grant partner and customer users permissions to create and edit reports through their profiles or permission sets. 
+
+#### Google Analytics™ for Salesforce Communities Package
+
+The package contains pre-configured reports that track search activity within an Experience Cloud site. Google Analytics integrates with your self-service Experience Cloud site to track user types, user IDs, pageviews on Salesforce objects, and customer search activity. We’ve also made it possible to turn on Google’s IP Anonymization, if your policies or needs require it.
 
