@@ -3,6 +3,10 @@
 - [Salesforce Experience Cloud Consultant](#salesforce-experience-cloud-consultant)
   - [Experience Cloud Basics](#experience-cloud-basics)
     - [UX Personas for Salesforce](#ux-personas-for-salesforce)
+      - [Personas for Sales Cloud](#personas-for-sales-cloud)
+      - [Personas for Service Cloud](#personas-for-service-cloud)
+      - [Personas for Marketing Cloud](#personas-for-marketing-cloud)
+      - [Personas for Experience Cloud](#personas-for-experience-cloud)
     - [Community Persona Cards](#community-persona-cards)
     - [Search Basics for Experience Builder Sites](#search-basics-for-experience-builder-sites)
   - [Sharing, Visibility, and Licensing](#sharing-visibility-and-licensing)
@@ -15,7 +19,7 @@
   - [Branding, Personalization, and Content](#branding-personalization-and-content)
     - [Personalize Experience Cloud Sites with Audience Targeting](#personalize-experience-cloud-sites-with-audience-targeting)
     - [Salesforce CMS Basics](#salesforce-cms-basics)
-      - [CMS Workspaces:](#cms-workspaces)
+      - [CMS Workspaces](#cms-workspaces)
       - [Content](#content)
     - [Connect Your External CMS to Your Experience Builder Site](#connect-your-external-cms-to-your-experience-builder-site)
     - [Build an Experience Cloud Site with Knowledge and Chat](#build-an-experience-cloud-site-with-knowledge-and-chat)
@@ -51,7 +55,8 @@ Exam Weight 8%
 
 **A persona** represents a group of users clustered based on shared behavior, motivations, goals, pain points, or other characteristics. Personas are based on the general tasks users perform in their roles, rather than focusing only on what they do in their Salesforce CRM.
 
-Personas for Sales Cloud:
+#### Personas for Sales Cloud
+
 - Sales Leader - managing, coaching, and training sales reps, managing tools and processes for sales reps.
   - viewing and creating reports and dashboards
   - customizing and adninistering SF
@@ -71,7 +76,8 @@ Personas for Sales Cloud:
   - entering new and updating existing prospects and customers
   - logging activities
 
-Personas for Service Cloud:
+#### Personas for Service Cloud
+
 - Case Solver - directly supporting customers, handling escalatged cases
   - Logging activities
   - Troubleshooting issues
@@ -94,7 +100,8 @@ Personas for Service Cloud:
   - viewing status on specific cases
   - troubleshooting customer issues
 
-Personas for Marketing Cloud
+#### Personas for Marketing Cloud
+
 - Marketing Manager - overseeing teams, projects, and campaigns, crafting and supervising execution of strategy
   - coordinating cross-channel messaging, cadencde, customer journeys
   - approving content
@@ -114,7 +121,8 @@ Personas for Marketing Cloud
   - creating APIs for data for Marketing Cloud
   - debugging automations
 
-Personas for Experience Cloud
+#### Personas for Experience Cloud
+
 - Site User - customers, partners and employees who visit site for public information
   - browsing and reading feeds
   - interacting with content
@@ -138,11 +146,12 @@ It’s totally OK if at your organization one user maps to multiple personas!
 
 A user story describes a specific task or activity using one of your personas. A user story is told from the persona’s perspective. It includes the persona, one of their top activities, and their motivations and goals to provide more context and make the story come to life.
 
->  As as  [Persona name]  I want to  [Task I want to do]  so that I  [Impact of completing this task].
+> As as  [Persona name]  I want to  [Task I want to do]  so that I  [Impact of completing this task].
 
 `“A (primary) persona must be satisfied by the particular UI, and cannot be satisfied by another persona’s UI.” —Alan Cooper`
 
 Key places where personas can add real value to your company:
+
 1. Smarter roadmap decisions: pusrchasing and licensing, custom features
 2. Tailoting user enagagement: trainings, events, activities with users
 3. Targeted research: selecting right participants to test `specific` features
@@ -151,19 +160,22 @@ Key places where personas can add real value to your company:
 
 ### [Search Basics for Experience Builder Sites](https://trailhead.salesforce.com/content/learn/modules/comm_search_basics)
 
-Expanding search results:
+Expanding search results
+
 - Lemmatization - helps users find different forms of a word
 - Spelling Correction
 - Expanded Queries - If a search term gets no results, this feature finds matches where the search term is part of a word
 - AND/OR Searching - first run AND search, if not many results, then run OR search
 
-The relevance of search results:
+The relevance of search results
+
 * How many times the search term appears in the record (The more often, the better.)
 * Which fields the search term appears in. (Name, title, and subject fields are important.)
 * Whether the customer owns the record. (We assume customers want to see the ones they own first.)
 * How often the customer views or edits the record. (Again, the more often, the better.)
 
 Global Search Results component can:
+
 - make almost any object searchable in the site. External sources can be added.
 - search filtering, to refine the results
 - add `All Results` tab to see the best matches
@@ -171,7 +183,7 @@ Global Search Results component can:
 Global Search for Peer-to-Peer Communities component - set up **autocomplete** feature.
 
 Set up **Synonyms Groups**:
-- Setup -> Synonyms -> click `New` to start a synonym group
+> Setup -> Synonyms -> click `New` to start a synonym group
 
 Add search results from external sources - details [here](https://help.salesforce.com/articleView?id=search_federated_parent.htm&language=en_US&_ga=2.128479556.993844698.1659361337-742205375.1652543223)
 
@@ -192,6 +204,7 @@ Exam Weight 17%
 
 User sharing lets you decide whether all users in an Experience Cloud site are visible to each other.
 Settings to consider when setting up sharing for external users:
+
 1. Portal User Visibility - if enbled, portal users in the same customer or partner portal account can see each other, regardless OWD, and see SF users that owns the portal account
 2. Site User Visibility - if enabled, `See other members of this community` can set ON or OFF, on community-by-community basis
 3. Guest User Visibility - `Let guest users see other members of this site` - grant guest user visibility on a site-by-site basis
@@ -202,7 +215,8 @@ Change org settings:
 Manage user and guest user visibility on a sity-by-site basis:
 > Setup -> Digital Experiences -> Click `Workspaces` on a site -> Click `Administration` -> `Prefernces` -> Select `See other members of this site` or `Let guest users see other members of this site` -> Click Save
 
-Site User Visibility Best Practives for Guest Users:
+Site User Visibility Best Practives for Guest Users
+
 * Hide `Knowledgeable Users` and `Reputation Leaderboard` components to protect identity of most active users
 * Never use `View All Users` permission for guest users
 * Never use the `Site User Visibility` in Sharing Settings
@@ -219,7 +233,8 @@ Project
 
 Project
 
-Object that can have an external sharing model:
+Object that can have an external sharing model
+
 - Accounts and their associated contracts and assets
 - Assets
 - Cases
@@ -230,7 +245,8 @@ Object that can have an external sharing model:
 - Custom Objects
 - Users
 
-Salesforce creates and maintains the following site-specific groups:
+Salesforce creates and maintains the following site-specific groups
+
 - Portal roles
 - Portal role and subordinates
 - Roles, Internal and Portal Subordinates
@@ -239,7 +255,8 @@ Salesforce creates and maintains the following site-specific groups:
 
 ### [Experience Cloud User Licenses](https://help.salesforce.com/s/articleView?id=sf.users_license_types_communities.htm&type=5)
 
-Lecenses used for external user:
+Licenses used for external user
+
 * Customer Community - B2C experiences w. large numbers of external users who need access to Case objects or Knowledge. Can be used w. Personal Accounts.
 * Customer Community Plus - B2C experiences w. external users who need access to reports and dashboards, and need standard sharing. Can be used w. Personal Accounts.
 * Partner Community - B2B experiences that need access to sales data such as PRM. Cannot be used w. Personal Accounts.
@@ -247,13 +264,14 @@ Lecenses used for external user:
 * External Identity - to deliver identity services. User with the external identity license can be upgraded to a community license at any time.
 * Channel Account - B2B sites and portals that calculate their usage based on number of partners instead of inidividual users.
 
-Each community license can be either:
+Each community license can be either
+
 - member-based
 - login-based - purhase a number of logins to be used every month. Logging in multiple times a day for a user counts as one login. Swithcing between sites doesn't comsume extra logins. The timeout period for a session is configurable up to max = 24 hrs.
 
 Users with the `Create and Set Up Experiences` permission automatically have full admin access to `Experience Builder`
 
-Unauthenticated or guest users who access your Experience Cloud site do not use up any of your external licenses. 
+Unauthenticated or guest users who access your Experience Cloud site do not use up any of your external licenses.  
 Page views are limited for guest users:
 Enterprise edition - 500,000/month
 Unlimitied edition - 1,000,000/month
@@ -288,7 +306,7 @@ CMS Components:
 - Workspaces - content is organized in different workspaces, with each own contributors, language settings, and channels
 - Experience Builder - to build sites.
 
-#### CMS Workspaces:
+#### CMS Workspaces
 
 - Primary organizing and security principle in Digital Experiences app
 - Consists of 1+ publishing channels
@@ -310,7 +328,7 @@ Organize content with Collections and Topics
 
 `CMS Connect` is available in sites that are based on Customer Service, Partner Central, and Lightning Bolt solutions.
 
-Prerequisites of using `CMS Connect`:
+Prerequisites of using `CMS Connect`
 
 - Your HTTP server must serve HTML fragments
 - URLs in CSS and JavaScript must be absolute
