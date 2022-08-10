@@ -49,6 +49,11 @@
       - [AppEchange Packages](#appechange-packages)
       - [Set Up Report Management for External Users](#set-up-report-management-for-external-users)
       - [Google Analytics™ for Salesforce Communities Package](#google-analytics-for-salesforce-communities-package)
+    - [Experience Cloud Sites Managers Guide](#experience-cloud-sites-managers-guide)
+      - [Create Custom Actions for Insights](#create-custom-actions-for-insights)
+    - [Experience Cloud Site Moderation Strategies and Tools](#experience-cloud-site-moderation-strategies-and-tools)
+    - [Gamification](#gamification)
+  - [Administration, Setup and Configuration](#administration-setup-and-configuration)
 
 ## Experience Cloud Basics
 Exam Weight 8%
@@ -525,4 +530,54 @@ Partner and customer users can create, delete, and edit reports in their own per
 #### Google Analytics™ for Salesforce Communities Package
 
 The package contains pre-configured reports that track search activity within an Experience Cloud site. Google Analytics integrates with your self-service Experience Cloud site to track user types, user IDs, pageviews on Salesforce objects, and customer search activity. We’ve also made it possible to turn on Google’s IP Anonymization, if your policies or needs require it.
+
+### [Experience Cloud Sites Managers Guide](https://resources.docs.salesforce.com/latest/latest/en-us/sfdc/pdf/salesforce_communities_managers_guide.pdf?_ga=2.175830177.2093328585.1659960874-1909944366.1653933554)
+
+To assign a user as an Experience Cloud site manager, simply give them the `Manage Experiences` permission.
+You can assign moderators by assigning a permission set that includes one or more of following moderation permissions:
+
+- Moderate Experiences Feeds
+- Moderate Experiences Files
+- Moderate Experiences Chatter Messages
+- Can Approve Feed Post and Comment
+- Moderate Experience Users
+- Manage Experiences
+- Access Experience Management
+
+Experience Cloud site administrators and managers use Experience Management to monitor Experience Cloud site activity, and set up other important management features.
+
+#### Create Custom Actions for Insights
+
+Do more with Insights reports with custom actions. Say a spammer attacks your Experience Cloud site. You can create and use a custom action to remove all the spammer’s posts and comments with just one click. Custom Insights actions work with standard and custom objects.
+
+### [Experience Cloud Site Moderation Strategies and Tools](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.69857427.2093328585.1659960874-1909944366.1653933554&type=5&id=sf.networks_moderation_overview.htm)
+
+Moderation allows you to empower members of your Experience Cloud site to monitor content and ensure that it’s appropriate and relevant.
+
+- `Moderation Insights` are arranged in clickable tiles on the Moderation Overview page in Experience Workspaces. View the entire picture of your site’s moderation activity at a glance and take action on day-to-day moderation tasks.
+- Turn on flagging for your Experience Cloud site to empower members to flag posts, comments, files, and messages that they deem inappropriate.
+- Create content and/or member criteria that define keywords or groups of members. Criteria are used in rules to moderate member-generated content, such as posts and comments.
+- Create and modify rules for your Experience Cloud site to moderate member-generated content. Each rule specifies the member-generated content the rule applies to, the criteria to enforce the rule on, and the moderation action to take. Moderation rules help protect your site from spammers, bots, and offensive or inappropriate content.
+- Review and Approve Posts and Comments in Your Experience Cloud Site. Posts and comments pending review aren’t displayed in the feed.
+- Moderate Flagged Posts and Comments in Your Experience Cloud Site
+- Moderate Flagged Discussions in Your Experience Cloud Site
+- Moderate Flagged Files in Your Experience Cloud Site
+- Moderate Flagged Direct Messages in Your Experience Cloud Site
+- Moderate Flagged Private Messages in Your Experience Cloud Site
+- Use triggers to create custom advanced moderation logic that automatically flags items in your Experience Cloud site - after insert triggers on FeedItem, FeedComment, ChatterMessage, or ContentDocument
+
+### [Gamification](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.182647717.2093328585.1659960874-1909944366.1653933554&type=5&id=sf.networks_gamification.htm)
+
+Use gamification tools, like Recognition Badges and Reputation, to keep your members engaged in your site.
+
+- Recognition Badges
+  - Chatter must be enabled for your site
+  - Recognition Badges are based on the WDC Thanks feature
+- Reputation
+  - Your reputation in the Experience Cloud site directly corresponds to how active you are.
+  - Your reputation level appears on your profile page and when any user hovers over your name. 
+
+## Administration, Setup and Configuration
+
+Exam Weight 25%
 
