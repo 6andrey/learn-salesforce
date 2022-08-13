@@ -54,6 +54,38 @@
     - [Experience Cloud Site Moderation Strategies and Tools](#experience-cloud-site-moderation-strategies-and-tools)
     - [Gamification](#gamification)
   - [Administration, Setup and Configuration](#administration-setup-and-configuration)
+    - [Partner Relationship Management](#partner-relationship-management)
+    - [Authenticate Experience Cloud Site Users](#authenticate-experience-cloud-site-users)
+      - [Configure SAML for Experience Cloud Sites](#configure-saml-for-experience-cloud-sites)
+      - [Configure Authentication Providers](#configure-authentication-providers)
+      - [Configure Authorization Flows with OAuth](#configure-authorization-flows-with-oauth)
+    - [Customize Login, Self-Registration, and Password Management for Your Site](#customize-login-self-registration-and-password-management-for-your-site)
+      - [Customize Login Experience](#customize-login-experience)
+      - [Brand Experience Cloi=ud Login Page](#brand-experience-cloiud-login-page)
+      - [Create Dynamic Branding URLs](#create-dynamic-branding-urls)
+      - [Set Up Self-Registration for Your Experience Cloud Site](#set-up-self-registration-for-your-experience-cloud-site)
+    - [Enable Other Salesforce Features in Experience Cloud Sites](#enable-other-salesforce-features-in-experience-cloud-sites)
+      - [Cases](#cases)
+      - [Site Case Feed](#site-case-feed)
+      - [Chatter Questions](#chatter-questions)
+      - [Emails to Leads and Contacts](#emails-to-leads-and-contacts)
+      - [Salesforce Knowledge](#salesforce-knowledge)
+      - [Etc.](#etc)
+    - [Experience Cloud Authentication and Security](#experience-cloud-authentication-and-security)
+      - [Clickjack Protection](#clickjack-protection)
+      - [Authenticate Experience Cloud Site Users](#authenticate-experience-cloud-site-users-1)
+      - [Encrypt Experience Cloud Site Data](#encrypt-experience-cloud-site-data)
+      - [CSP and Lightning Locker](#csp-and-lightning-locker)
+      - [Experience Cloud Cookies](#experience-cloud-cookies)
+      - [Securely Share Your Experience Cloud Sites with Guest Users](#securely-share-your-experience-cloud-sites-with-guest-users-1)
+    - [Organize Experience Cloud Sites with Topics](#organize-experience-cloud-sites-with-topics)
+      - [Topic Metrics](#topic-metrics)
+  - [Customization considerations, and limitations](#customization-considerations-and-limitations)
+    - [Experience Builder Site Limitations](#experience-builder-site-limitations)
+      - [General limitations](#general-limitations)
+      - [Partner Sites](#partner-sites)
+    - [Experience Cloud Sites Usage Allocation](#experience-cloud-sites-usage-allocation)
+    - [Improve Experience Cloud Site Performance](#improve-experience-cloud-site-performance)
 
 ## Experience Cloud Basics
 Exam Weight 8%
@@ -581,3 +613,156 @@ Use gamification tools, like Recognition Badges and Reputation, to keep your mem
 
 Exam Weight 25%
 
+### [Partner Relationship Management](https://trailhead.salesforce.com/content/learn/modules/partner-relationship-management)
+
+ `Partner Recruitment` App on the AppExchange. This app provides partner recruitment forms with predefined fields or questions, customizable emails that can be sent to potential partners with links to the questionnaire, and response tracking.
+
+ Learning management solution (LMS) apps are available to be drag and dropped as a component into Sales Cloud PRM. You can find these on the AppExchange. Salesforce has a strategic relationship with partners, like Appinium and NetExam, who have created apps that make training a breeze
+
+ ### [Authenticate Experience Cloud Site Users](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.217263766.1049103500.1660399025-742205375.1652543223&type=5&id=sf.networks_authentication_options.htm)
+
+ Options to authenticate users:
+
+ - (By default) log in with username and password
+ - SAML
+ - 3rd party auth providers
+ - OAuth
+ - Self-registration with Login Discovery
+
+#### Configure SAML for Experience Cloud Sites
+
+If your Salesforce org already uses SAML single sign-on (SSO) to simplify and standardize your user authentication, you can extend this capability to your Experience Cloud sites. When implementing SAML SSO for Experience Cloud sites, the key is to use the site URL associated with login for the SSO flow. Also make sure that the site URL in the SAML assertion POST includes /login. 
+
+#### Configure Authentication Providers
+
+3rd-party auth providers that support OpenID (e.g. Facebook)
+
+#### Configure Authorization Flows with OAuth
+
+If your org wants to build integrations between Experience Cloud sites and custom-branded apps, such as mobile or desktop apps, you can use OAuth to create a branded login page. Experience Cloud supports all available authorization flows, except for the username-password OAuth authorization flow and the SAML assertion flow. When implementing branded OAuth flows for Experience Cloud sites, you configure the authorize URL to use the site URL. The authorization flow then directs users to the app approval page.
+
+### [Customize Login, Self-Registration, and Password Management for Your Site](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.46752679.1049103500.1660399025-742205375.1652543223&type=5&id=sf.networks_customize_login.htm)
+
+Configure the default login, logout, password management, and self-registration options for your site. Or customize the behavior with Apex and Visualforce or Experience Builder (Site.com Studio) pages. You can also use dynamic URLs to brand your pages at run time. By default, each site comes with default login, logout, password management, and self-registration pages. Salesforce also includes associated Apex controllers that drive this functionality under the hood. You can use Experience Builder or Visualforce to create custom branding and change the default behavior.
+
+#### Customize Login Experience
+
+Use `dynamic branding` URLs to customize the user’s login experience at run time. Dynamic branding applies to the entire login process—the initial login page plus related pages, such as multi-factor authentication (MFA), Terms & Conditions, or login flow. You can add dynamic branding to default, Experience Builder, Visualforce, and custom login pages.
+
+Login Discovery Page
+
+- After users enter the identifier, they’re challenged to verify themselves
+- If SSO-enabled, Login Discovery can send the user directly to the identity provider login page
+- users can identify themselves using an email address or phone number. 
+- It also supports custom identifiers, such as an employee number or federation ID, in Apex.
+
+#### Brand Experience Cloi=ud Login Page
+
+You can use your own logo, change background colors, add a custom footer, and even change the content on the right side of the login page.
+
+#### Create Dynamic Branding URLs
+
+For example, you can change which logo to display depending on whether the user is an employee or customer. Or display a particular self-registration page based on the user’s country code. When using dynamic branding to customize the login experience, it applies to the entire login process: the initial login page plus related pages, such as multi-factor authentication (MFA) or a login flow. You can add dynamic branding to Experience Builder, Visualforce, and custom login pages.
+
+From the Administration Login & Registration page, you specify the logo URL with the `{expid}`
+
+#### Set Up Self-Registration for Your Experience Cloud Site
+
+Enable self-registration to allow unlicensed guest users to join your site. When your users self-register, you can choose to save them as contacts under a business account or create a person account for each self-registering user.
+
+### [Enable Other Salesforce Features in Experience Cloud Sites](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.50988841.1049103500.1660399025-742205375.1652543223&type=5&id=sf.networks_enable_other_salesforce_features.htm)
+
+#### Cases
+
+When you enable cases for external users in your Experience Cloud site, you can assign cases to those members. Additionally, external members can edit cases, create new cases, add case comments, reassign cases, find case solutions, and create case teams. Determine whether users with Customer Community Plus licenses can view and edit cases in which they are listed as the contact. You can disable the standard sharing behavior that grants the assigned contact and everyone in their role hierarchy access to a case. After disabling this sharing behavior, you can control access to cases by creating a manual share or by using Apex managed sharing.
+
+#### Site Case Feed
+With the site case feed, agents and Experience Cloud site members see the life cycle of a case from start to finish. All case interactions appear in a unified, chronological Chatter case feed. Site members benefit from the added functionalities of Chatter, while support-side features help agents provide efficient, personalized support.
+
+#### Chatter Questions
+
+Chatter Questions helps you promote engagement by giving users the ability to ask and answer questions in their Chatter feed, in groups, and in records. Members in your users’ groups and Experience Cloud sites can answer questions in Chatter just as they would comment on a Chatter post. 
+
+#### Emails to Leads and Contacts
+
+Enable the Send Email button, so partner and customer users can send emails to leads and contacts from their Experience Cloud site.
+
+#### Salesforce Knowledge
+
+Enable Salesforce Knowledge to quickly get articles to your customers and agents in an Experience Cloud site. Knowledge articles provide accurate information to customers when and where they need it.
+
+#### Etc.
+
+- Enable Upvotes and Downvotes
+- Assign Permission to Verify Answers for Your Company
+- Assign Post Pinning Permission
+- Question-to-Case
+
+### [Experience Cloud Authentication and Security](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.218194841.1049103500.1660399025-742205375.1652543223&type=5&id=sf.networks_security.htm)
+
+#### Clickjack Protection
+
+- Allow framing by the same origin only (recommended): The default level for Experience Cloud sites. 
+- Don’t allow framing by any page (most protection)
+
+#### [Authenticate Experience Cloud Site Users](#authenticate-experience-cloud-site-users-1)
+
+#### Encrypt Experience Cloud Site Data
+
+#### CSP and Lightning Locker
+
+Experience Builder sites use Content Security Policy (CSP) and Lightning Locker to secure your site from malicious attacks and custom code vulnerabilities. CSP is a W3C standard that controls the source of content that can be loaded on your site’s pages and helps protect against cross-site scripting (XSS) attacks. Lightning Locker is a Salesforce architectural layer that allows third-party Lightning components and custom code to run safely on the same page in the browser. 
+
+#### Experience Cloud Cookies
+
+By saving a user’s settings, cookies can enhance the user’s experience and the performance of the Experience Cloud site. Salesforce doesn’t currently provide functionality for end-user cookie consent management. The platform is compatible with many existing third-party solutions.
+
+#### Securely Share Your Experience Cloud Sites with Guest Users
+
+Use a guest user profile to control public access to data, content, and objects in your site that don't require authentication. To increase the security of your Salesforce data, guest users are no longer automatically the owner of records they create. Instead, when a guest user creates a record, the record is assigned to a default active user in the org, who becomes the owner.
+
+Set the public access level to your Experience Builder site, and set page-specific access to your site pages. After you configure the guest user profile and the site guest user record, keep object-specific best practices in mind for guest user access.
+
+### [Organize Experience Cloud Sites with Topics](https://help.salesforce.com/s/articleView?id=sf.networks_topics_overview.htm&type=5)
+
+Use topics to structure your site’s content or highlight key discussions. You can create topics or use the topics that organically emerge from site member posts. Choose navigational topics and subtopics to provide a consistent map of your site. Use featured topics to highlight current, popular conversations. Use content topics to organize your original content. In the site itself, member-created topics let users organize information for each other, creating a personalized experience that boosts site engagement.
+
+#### Topic Metrics
+
+Find metrics on a topic’s detail page. With this information at their fingertips, site members know how current and popular a topic is. Admins can also use these metrics to highlight certain topics in their sites or consolidate similar topics based on usage.
+
+## Customization considerations, and limitations
+
+Exam Weight 7%
+
+### [Experience Builder Site Limitations](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.217277078.1049103500.1660399025-742205375.1652543223&type=5&id=sf.rss_limitations.htm)
+
+#### General limitations
+
+- The Create New option for lookups isn’t supported in Customer Service sites.
+- Partner and customer users can’t be added to account teams.
+- etc.
+
+#### Partner Sites
+
+- Partner Central doesn’t support the language selector.
+- You can’t export sites built on Partner Central as Lightning Bolt solutions. You can export individual pages, but not the entire site.
+
+### [Experience Cloud Sites Usage Allocation](https://help.salesforce.com/s/articleView?language=en_US&_ga=2.247688071.1049103500.1660399025-742205375.1652543223&type=5&id=sf.networks_usage_allocation.htm)
+
+Experience Cloud site usage is governed by daily, monthly, and yearly allocations. 
+
+- Bandwidth - The number of megabytes served and received from both the community’s origin server and the cache server. This allocation is only calculated for non-authenticated community users.
+- Service Request Time - The total server time in minutes required to generate pages for the community. This allocation is only calculated for non-authenticated community users.
+- Page View - A request from a non-authenticated community user to load a page associated with your community. Requests from authenticated community users are not counted as page views. 
+
+### [Improve Experience Cloud Site Performance](https://help.salesforce.com/s/articleView?id=sf.community_designer_performance_overview.htm&type=5)
+
+Enabling Account Role Optimization (ARO) can significantly increase the number of users that a license can accommodate. Tailor your performance tools based on page traffic. Which pages do visitors view most, and how many views are there during high-traffic times? How many views do your pages average?
+
+- For high-volume traffic, the `CDN for Digital Experience` can reduce load times. CDN is a geographically distributed network of servers that optimizes routing and stores cached versions of web content. 
+- To build a robust and lightweight platform with unparalleled performance, we recommend the `Lightning Web Runtime (LWR) platform`.
+- For faster page load times and performance, we recommend `Progressive Rendering`, which improves individual page performance.
+- Enable `micro-batching` to create a high-volume of records for Cases, Leads, and Custom Objects. Micro-batching creates these records in batches rather than one at a time. Asynchronously batch processing record creation is an effective way to create object records for high-traffic sites.
+- Self-registration is the fastest way to register users to a site. Enable high-volume self-registration using micro-batching to process self-registration requests in batches rather than one at a time, and more effectively handle self-registration loads for high volume-sites.
+- Enable `Account Role Optimization` to avoid creating unnecessary roles. It delays account role creation until there’s a second user and roles are necessary to support sharing data.
