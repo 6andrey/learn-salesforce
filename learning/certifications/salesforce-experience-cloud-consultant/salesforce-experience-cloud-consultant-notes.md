@@ -16,6 +16,7 @@
     - [Experience Cloud User Licenses](#experience-cloud-user-licenses)
     - [Configure an External Account Hierarchy](#configure-an-external-account-hierarchy)
     - [Data Security](#data-security)
+      - [Levels of Data Access](#levels-of-data-access)
   - [Branding, Personalization, and Content](#branding-personalization-and-content)
     - [Personalize Experience Cloud Sites with Audience Targeting](#personalize-experience-cloud-sites-with-audience-targeting)
     - [Salesforce CMS Basics](#salesforce-cms-basics)
@@ -328,6 +329,18 @@ External account hierarchies work like Salesforce role hierarchies. Account reco
 4. Hierachy can up to 5 levels deep
 
 ### [Data Security](https://trailhead.salesforce.com/content/learn/modules/data_security)
+
+(General SF Admin knowledge, not specific to Experience Cloud)
+#### Levels of Data Access
+
+- Organization - uathorized users, password policies, login limits, etc.
+- Objects - set access on Profiles or Permission Sets / PSGs
+- FLS
+- Records
+  - OWD - lock down data to the most restrictive level
+  - Role Hierarchies - give access to users up in hierarchy to records owned by users down in hierarchy
+  - Sharing Rules - automatic exceptions to OWD
+  - Manual Sharing
 
 ## Branding, Personalization, and Content
 
