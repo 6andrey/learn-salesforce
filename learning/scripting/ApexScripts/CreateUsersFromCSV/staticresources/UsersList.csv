@@ -1,0 +1,2 @@
+IsActive,FirstName,LastName,Email,Username,Profile,TimeZoneSidKey,LocaleSidKey,EmailEncodingKey,LanguageLocaleKey,Alias,UserRole,PSG1,PS1,PS2,PS3,GM1,GM2,GM3
+TRUE,Test6,User,email@example.com,test6@example.com.testuser6_20230925,Standard User,America/New_York,en_US,UTF-8,en_US,T6User,CEO,,Test_Permission_Set,CRMUserPsl,SalesUserPsl,,,
