@@ -1,3 +1,10 @@
+Integer psgFirst = 12; // First column with Permission Set Group
+Integer psgLast = 12; // Last column with Permission Set Group
+Integer psFirst = 13; // First column with Permission Set
+Integer psLast = 15; // Last column with Permission Set
+Integer gFirst = 16; // First column with Public Group
+Integer gLast = 18; // Last column with Public Group
+
 Map<String, SObject> recordsMap(String key, List<SObject> records) {
     Map<String, SObject> m = new Map<String,SObject>();
     for (SObject r: records) {
@@ -10,6 +17,7 @@ Map<String, SObject> profilesMap = recordsMap('Name', [SELECT Name FROM Profile]
 Map<String, SObject> rolesMap = recordsMap('Name', [SELECT Name FROM UserRole]);
 Map<String, SObject> permissionsetsMap = recordsMap('Name', [SELECT Name FROM PermissionSet]);
 Map<String, SObject> permissionsetgroupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM PermissionSetGroup]);
+Map<String, SObject> groupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM Group]);
 
 String resourceName = 'UsersList'; // Replace with the actual name of your Static Resource
 String csvBody = '';
@@ -84,11 +92,42 @@ if (!usersToInsert.isEmpty()) { // Try to insert User records, if the array is n
     }
 }
 
+List<PermissionSetAssignment> permissionSetGroupAssignmentsToInsert = new List<PermissionSetAssignment>(); // PSG Assignments user the same object as PS Assignments
+
+// Permission Set Group Assignments Loop of loops: j columns of possible Permission Sets by i rows of Users
+
+for (Integer j = psgFirst; j <= psgLast; j++) {
+
+    for (Integer i = 1; i < csvRows.size(); i++) {
+
+        List<String> csvValues = csvRows[i].split(',');
+
+        if (!String.isBlank(csvValues[j])) {
+
+            PermissionSetAssignment newPermissionSetGroupAssignment = new PermissionSetAssignment ( // PSG Assignments user the same object as PS Assignments
+                AssigneeId = usersToInsert[i-1].Id,
+                PermissionSetGroupId = permissionsetgroupsMap.get(csvValues[j]).Id
+            );
+            permissionSetGroupAssignmentsToInsert.add(newPermissionSetGroupAssignment);
+
+        }
+    }
+}
+
+if (!permissionSetGroupAssignmentsToInsert.isEmpty()) {
+    try {
+        insert permissionSetGroupAssignmentsToInsert;
+        System.debug('Permission set groiup assignments inserted successfully.');
+    } catch (Exception e) {
+        System.debug('Error inserting permission set group assignments: ' + e.getMessage());
+    }
+}
+
 List<PermissionSetAssignment> permissionSetAssignmentsToInsert = new List<PermissionSetAssignment>();
 
-// Loop of loops j columns of possible Permission Sets by i rows of users
+// Permission Set Assignments Loop of loops: j columns of possible Permission Sets by i rows of Users
 
-for (Integer j = 13; j < 16; j++) {
+for (Integer j = psFirst; j <= psLast; j++) {
 
     for (Integer i = 1; i < csvRows.size(); i++) {
 
@@ -112,5 +151,36 @@ if (!permissionSetAssignmentsToInsert.isEmpty()) {
         System.debug('Permission set assignments inserted successfully.');
     } catch (Exception e) {
         System.debug('Error inserting permission set assignments: ' + e.getMessage());
+    }
+}
+
+List<GroupMember> groupMembersToInsert = new List<GroupMember>();
+
+// Group Members Loop of loops: j columns of possible Grroups by i rows of Users
+
+for (Integer j = gFirst; j <= gLast; j++) {
+
+    for (Integer i = 1; i < csvRows.size(); i++) {
+
+        List<String> csvValues = csvRows[i].split(',');
+
+        if (!String.isBlank(csvValues[j])) {
+
+            GroupMember newGroupMember = new GroupMember (
+                UserOrGroupId = usersToInsert[i-1].Id,
+                GroupId = groupsMap.get(csvValues[j]).Id
+            );
+            groupMembersToInsert.add(newGroupMember);
+
+        }
+    }
+}
+
+if (!groupMembersToInsert.isEmpty()) {
+    try {
+        insert groupMembersToInsert;
+        System.debug('Group members inserted successfully.');
+    } catch (Exception e) {
+        System.debug('Error inserting group members: ' + e.getMessage());
     }
 }
