@@ -32,7 +32,7 @@ Map<String, SObject> rolesMap = recordsMap('Name', [SELECT Name FROM UserRole]);
 Map<String, SObject> permissionsetsMap = recordsMap('Name', [SELECT Name FROM PermissionSet]);
 Map<String, SObject> permissionsetgroupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM PermissionSetGroup]);
 Map<String, SObject> groupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM Group]);
-
+Map<String, SObject> usersMap = recordsMap('Username', [SELECT Username FROM User]);
 
 // Parse and insert user records 
 
@@ -45,10 +45,9 @@ List<String> csvRows = csvBody.split('\n');
 for (Integer i = 1; i < csvRows.size(); i++) { // Skip the header row (row zero)
     List<String> csvValues = csvRows[i].split(',');
 
-    List<User> ExistingUser = [SELECT Id FROM User WHERE Username = :csvValues[4]]; // Check if user with such username already exists
     String UsernameString = '';
 
-    if (ExistingUser.isEmpty()) {
+    if (usersMap.get(csvValues[4]).Id == null) {
 
         UsernameString = csvValues[4]; // If a User doesn't exist, use the username from CSV
 
