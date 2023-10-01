@@ -9,6 +9,7 @@ if (csvResource != null) {
     System.debug(csvBody);
 } else {
     System.debug('Static Resource not found.');
+    return;
 }
 
 Integer psgFirst = 12; // First column with Permission Set Group
@@ -181,4 +182,9 @@ if (!groupMembersToInsert.isEmpty()) {
     } catch (Exception e) {
         System.debug('Error inserting group members: ' + e.getMessage());
     }
+}
+
+// reset passwords for inserted users, and send them email
+for (User insertedUser : usersToInsert) {
+    System.resetPassword(insertedUser.Id, true);
 }
