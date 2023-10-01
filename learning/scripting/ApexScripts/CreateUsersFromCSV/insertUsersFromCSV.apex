@@ -1,3 +1,16 @@
+String resourceName = 'UsersList'; // Replace with the actual name of your Static Resource
+String csvBody = '';
+Blob csvBlob;
+
+StaticResource csvResource = [SELECT Id, Body FROM StaticResource WHERE Name = :resourceName LIMIT 1];
+if (csvResource != null) {
+    csvBlob = csvResource.Body;
+    csvBody = csvBlob.toString();
+    System.debug(csvBody);
+} else {
+    System.debug('Static Resource not found.');
+}
+
 Integer psgFirst = 12; // First column with Permission Set Group
 Integer psgLast = 12; // Last column with Permission Set Group
 Integer psFirst = 13; // First column with Permission Set
@@ -19,21 +32,6 @@ Map<String, SObject> permissionsetsMap = recordsMap('Name', [SELECT Name FROM Pe
 Map<String, SObject> permissionsetgroupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM PermissionSetGroup]);
 Map<String, SObject> groupsMap = recordsMap('DeveloperName', [SELECT DeveloperName FROM Group]);
 
-String resourceName = 'UsersList'; // Replace with the actual name of your Static Resource
-String csvBody = '';
-
-// Retrieve the CSV file from the Static Resource
-PageReference csvFile = PageReference.forResource(resourceName);
-Blob csvBlob;
-
-if (!csvFile.getURL().startsWith('/resource/')) {
-    System.debug('Static Resource not found.');
-} else {
-    csvBlob = csvFile.getContent();
-    csvBody = csvBlob.toString();
-}
-
-System.debug('csvBody: ' + csvBody);
 
 // Parse and insert user records 
 
